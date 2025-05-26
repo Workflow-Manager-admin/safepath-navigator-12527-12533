@@ -69,6 +69,28 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/a
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
 
+## Environment Setup
+
+SafePath Navigator requires certain environment variables to function properly:
+
+### Required Environment Variables
+
+1. `REACT_APP_GOOGLE_MAPS_API_KEY` - Google Maps API Key with Maps JavaScript API enabled
+
+### Setting Up Environment Variables
+
+1. Copy `.env.example` to a new file called `.env`
+2. Fill in your actual API key values
+3. Run `npm run check-env` to validate your setup
+
+You can verify your environment setup at any time by running:
+
+```bash
+npm run check-env
+```
+
+This will be automatically run when you start the development server.
+
 ### Advanced Configuration
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
