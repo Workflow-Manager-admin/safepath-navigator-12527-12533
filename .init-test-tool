@@ -1,0 +1,4 @@
+{
+    "command": "npm run test",
+    "working_directory": "/home/kavia/workspace/code-generation/safepath-navigator-12527-12533/safe_path_navigator"
+}
