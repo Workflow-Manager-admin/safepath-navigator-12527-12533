@@ -1,10 +1,52 @@
 
+> react-kavia@0.1.0 prestart
+> npm run check-env
+
+
+> react-kavia@0.1.0 check-env
+> node check-env.js
+
+Checking environment variables...
+================================
+✅ .env file found at: /home/kavia/workspace/code-generation/safepath-navigator-12527-12533/safe_path_navigator/.env
+✅ .env file parsed successfully
+
+Checking required environment variables:
+======================================
+✅ REACT_APP_GOOGLE_MAPS_API_KEY exists: AIza...
+
+Checking NODE_ENV:
+=================
+❗ NODE_ENV is not set. This may be fine for development but should be set for production.
+
+React app environment variables:
+===============================
+✅ REACT_APP_GOOGLE_MAPS_API_KEY: AIza...
+
+Security check:
+==============
+❗ Potential security issue: REACT_APP_GOOGLE_MAPS_API_KEY might contain sensitive data exposed to the browser
+
+Testing manual environment loading:
+=================================
+✅ Successfully read .env file content
+✅ Found 1 environment variables in .env file
+✅ REACT_APP_GOOGLE_MAPS_API_KEY format appears valid
+
+Verifying manual environment injection:
+====================================
+✅ REACT_APP_GOOGLE_MAPS_API_KEY now exists: AIza...
+
+Environment Check Summary:
+=========================
+❌ 2 problems found.
+
 > react-kavia@0.1.0 start
 > react-scripts start
 
-(node:2305) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:3568) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:2305) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:3568) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
 Compiled successfully!
@@ -17,16 +59,4 @@ You can now view react-kavia in the browser.
 Note that the development build is not optimized.
 To create a production build, use npm run build.
 
-webpack compiled successfully
-Compiling...
-Compiled successfully!
-webpack compiled successfully
-Compiling...
-Compiled successfully!
-webpack compiled successfully
-Compiling...
-Compiled successfully!
-webpack compiled successfully
-Compiling...
-Compiled successfully!
 webpack compiled successfully

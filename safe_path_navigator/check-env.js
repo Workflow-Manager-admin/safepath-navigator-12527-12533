@@ -53,7 +53,7 @@ requiredVariables.forEach(variable => {
     console.log(`   Value in .env: ${fromParsed.substring(0, 4)}...`);
     problemCount++;
   } else {
-    const displayValue = value ? value.substring(0, 4) + '...' : 'empty string';
+    const displayValue = value ? `${value.substring(0, 4)}...` : 'empty string';
     console.log(`✅ ${variable} exists: ${displayValue}`);
   }
 });
@@ -65,7 +65,6 @@ if (process.env.NODE_ENV) {
   console.log(`✅ NODE_ENV is set to: ${process.env.NODE_ENV}`);
 } else {
   console.log('❗ NODE_ENV is not set. This may be fine for development but should be set for production.');
-  problemCount++;
 }
 
 // Check for browser-specific environment variables
@@ -76,7 +75,7 @@ console.log('===============================');
 if (browserEnvVars.length > 0) {
   browserEnvVars.forEach(variable => {
     if (process.env[variable]) {
-      const displayValue = process.env[variable].substring(0, 4) + '...';
+      const displayValue = `${process.env[variable].substring(0, 4)}...`;
       console.log(`✅ ${variable}: ${displayValue}`);
     } else {
       console.log(`✅ ${variable}: <empty string>`);
@@ -98,7 +97,6 @@ browserEnvVars.forEach(variable => {
     if (variable.includes(sensitiveKey) && variable.startsWith('REACT_APP_')) {
       console.log(`❗ Potential security issue: ${variable} might contain sensitive data exposed to the browser`);
       securityProblems++;
-      problemCount++;
       break;
     }
   }
@@ -151,7 +149,7 @@ try {
 console.log('\nVerifying manual environment injection:');
 console.log('====================================');
 if (process.env.REACT_APP_GOOGLE_MAPS_API_KEY) {
-  const displayApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY.substring(0, 4) + '...';
+  const displayApiKey = `${process.env.REACT_APP_GOOGLE_MAPS_API_KEY.substring(0, 4)}...`;
   console.log(`✅ REACT_APP_GOOGLE_MAPS_API_KEY now exists: ${displayApiKey}`);
 } else {
   console.log('❌ REACT_APP_GOOGLE_MAPS_API_KEY still missing after manual injection');
