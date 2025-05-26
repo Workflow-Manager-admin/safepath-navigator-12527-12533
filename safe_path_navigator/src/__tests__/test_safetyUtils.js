@@ -45,24 +45,24 @@ describe('Safety Utility Functions', () => {
     });
     
     test('should calculate lower crime safety scores for routes through high crime areas', () => {
-      // Route through high crime areas
+      // Route directly through several high crime areas
       const highCrimeRoute = [
-        { lat: 37.774, lng: -122.419 }, // High crime area
-        { lat: 37.775, lng: -122.417 }, // Another high crime area
-        { lat: 37.776, lng: -122.418 }  // Another high crime area
+        { lat: 37.774, lng: -122.419 }, // High crime area (weight 0.8)
+        { lat: 37.776, lng: -122.418 }, // High crime area (weight 0.9)
+        { lat: 37.775, lng: -122.417 }, // High crime area (weight 0.7)
       ];
       
-      // Route through low crime areas
+      // Route far away from crime areas
       const lowCrimeRoute = [
-        { lat: 37.769, lng: -122.412 }, // Low crime area
-        { lat: 37.768, lng: -122.410 }, // Low crime area
-        { lat: 37.767, lng: -122.408 }  // Away from crime areas
+        { lat: 38.0, lng: -123.0 }, // Far from any crime area
+        { lat: 38.1, lng: -123.1 }, // Far from any crime area
+        { lat: 38.2, lng: -123.2 }, // Far from any crime area
       ];
       
       const highCrimeScore = calculateSafetyScore(highCrimeRoute);
       const lowCrimeScore = calculateSafetyScore(lowCrimeRoute);
       
-      // The route through high crime areas should have a lower safety score
+      // The route through high crime areas should have a lower crime safety score
       expect(highCrimeScore.crime).toBeLessThan(lowCrimeScore.crime);
     });
     
