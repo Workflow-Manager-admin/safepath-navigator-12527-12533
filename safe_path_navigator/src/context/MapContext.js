@@ -1,5 +1,6 @@
 import React, { createContext, useState, useContext, useEffect } from 'react';
 import { calculateSafetyScore, generateMockRoutes } from '../utils/safetyUtils';
+import { getCrimeStatsByCoordinates } from '../services/fbiCrimeDataService';
 
 // Create a context for managing map state
 const MapContext = createContext();
