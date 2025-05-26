@@ -38,14 +38,50 @@ export const MapProvider = ({ children }) => {
       
       // In a real app, this would be an API call to a routing service
       // We're using mock data for demonstration
-      setTimeout(() => {
+      setTimeout(async () => {
         const newRoutes = generateMockRoutes(origin, destination);
         
         // Calculate safety scores for each route
-        const routesWithScores = newRoutes.map(route => ({
-          ...route,
-          safetyScore: calculateSafetyScore(route.path)
-        }));
+        const routesWithScores = await Promise.all(
+          newRoutes.map(async route => {
+            // For each route, get crime data for midpoint of route
+            const midpointIndex = Math.floor(route.path.length / 2);
+            const midpoint = route.path[midpointIndex] || origin;
+            
+            // Get crime data from FBI API for the area
+            const crimeData = await getCrimeStatsByCoordinates(
+              midpoint.lat,
+              midpoint.lng, 
+              0.5 // 0.5 mile radius
+            );
+            
+            // Use local calculation for now, but incorporate crime data if available
+            const safetyScore = calculateSafetyScore(route.path);
+            
+            // If we have crime data from the API, use it to influence safety score
+            if (crimeData && crimeData.safetyScore) {
+              // Blend API safety score with our calculated score
+              const apiSafetyWeight = 0.4; // Weight given to API data
+              
+              safetyScore.crime = Math.round(
+                (safetyScore.crime * (1 - apiSafetyWeight)) + 
+                (crimeData.safetyScore * apiSafetyWeight)
+              );
+              
+              // Recalculate overall score with new crime score
+              safetyScore.overall = Math.round(
+                (safetyScore.crime * 0.6) + (safetyScore.lighting * 0.4)
+              );
+            }
+            
+            return {
+              ...route,
+              safetyScore,
+              // Store crime data for potential display in UI
+              crimeData: crimeData || null
+            };
+          })
+        );
         
         setRoutes(routesWithScores);
         

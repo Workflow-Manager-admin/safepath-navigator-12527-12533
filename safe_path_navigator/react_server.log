@@ -78,3 +78,6 @@ src/context/MapContext.js
   Line 3:10:  'getCrimeStatsByCoordinates' is defined but never used  no-unused-vars
 
 webpack compiled with 1 warning
+Compiling...
+Compiled successfully!
+webpack compiled successfully
