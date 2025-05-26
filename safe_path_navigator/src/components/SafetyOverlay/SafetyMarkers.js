@@ -10,17 +10,22 @@ import { mockLightingData, mockEmergencyServices } from '../../utils/safetyUtils
  * @PUBLIC_INTERFACE
  */
 const SafetyMarkers = ({ showLighting = false, showEmergency = false }) => {
-  // Skip rendering if nothing is visible or Google Maps is not loaded
-  if ((!showLighting && !showEmergency) || typeof window.google === 'undefined') return null;
+  // Skip rendering if nothing is visible
+  if (!showLighting && !showEmergency) return null;
+  
+  // Skip rendering if Google Maps is not loaded
+  if (typeof window === 'undefined' || !window.google || !window.google.maps) return null;
 
   // Icon for street lights
   const lightingIcon = {
     url: 'https://maps.google.com/mapfiles/ms/icons/lightbulb.png',
-    scaledSize: window.google?.maps ? new window.google.maps.Size(24, 24) : null
+    scaledSize: new window.google.maps.Size(24, 24)
   };
 
   // Get appropriate icon for different emergency service types
   const getEmergencyIcon = (type) => {
+    if (!window.google || !window.google.maps) return null;
+    
     switch (type) {
       case 'police':
         return {
