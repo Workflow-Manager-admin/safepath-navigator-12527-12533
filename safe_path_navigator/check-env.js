@@ -53,7 +53,8 @@ requiredVariables.forEach(variable => {
     console.log(`   Value in .env: ${fromParsed.substring(0, 4)}...`);
     problemCount++;
   } else {
-    console.log(`✅ ${variable} exists: ${value ? value.substring(0, 4) + '...' : 'empty string'}`);
+    const displayValue = value ? value.substring(0, 4) + '...' : 'empty string';
+    console.log(`✅ ${variable} exists: ${displayValue}`);
   }
 });
 
@@ -74,7 +75,12 @@ console.log('\nReact app environment variables:');
 console.log('===============================');
 if (browserEnvVars.length > 0) {
   browserEnvVars.forEach(variable => {
-    console.log(`✅ ${variable}: ${process.env[variable].substring(0, 4)}...`);
+    if (process.env[variable]) {
+      const displayValue = process.env[variable].substring(0, 4) + '...';
+      console.log(`✅ ${variable}: ${displayValue}`);
+    } else {
+      console.log(`✅ ${variable}: <empty string>`);
+    }
   });
 } else {
   console.log('❌ No REACT_APP_ environment variables found.');
@@ -145,7 +151,8 @@ try {
 console.log('\nVerifying manual environment injection:');
 console.log('====================================');
 if (process.env.REACT_APP_GOOGLE_MAPS_API_KEY) {
-  console.log(`✅ REACT_APP_GOOGLE_MAPS_API_KEY now exists: ${process.env.REACT_APP_GOOGLE_MAPS_API_KEY.substring(0, 4)}...`);
+  const displayApiKey = process.env.REACT_APP_GOOGLE_MAPS_API_KEY.substring(0, 4) + '...';
+  console.log(`✅ REACT_APP_GOOGLE_MAPS_API_KEY now exists: ${displayApiKey}`);
 } else {
   console.log('❌ REACT_APP_GOOGLE_MAPS_API_KEY still missing after manual injection');
   problemCount++;
