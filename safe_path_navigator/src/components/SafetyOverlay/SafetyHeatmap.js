@@ -36,18 +36,16 @@ const SafetyHeatmap = ({ visible = false }) => {
     ]
   };
 
-  // Convert the mock data points to Google Maps LatLng objects
+  // Convert the mock data points to Google Maps LatLng objects with weights
+  // HeatmapLayer accepts both simple LatLng objects or {location, weight} objects
   const heatmapData = mockCrimeData.map(point => ({
     location: new window.google.maps.LatLng(point.lat, point.lng),
     weight: point.weight
   }));
 
-  // Extract just the location objects for the HeatmapLayer
-  const heatmapLocations = heatmapData.map(point => point.location);
-
   return (
     <HeatmapLayer
-      data={heatmapLocations}
+      data={heatmapData}
       options={heatmapOptions}
     />
   );
