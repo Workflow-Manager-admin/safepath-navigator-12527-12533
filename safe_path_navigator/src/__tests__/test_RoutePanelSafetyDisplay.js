@@ -9,7 +9,7 @@ import * as fbiCrimeDataService from '../services/fbiCrimeDataService';
 import { mockRoutesWithSafetyData } from './test_utils';
 
 // Mock the MapContext hook
-jest.mock('../../src/context/MapContext', () => ({
+jest.mock('../context/MapContext', () => ({
   useMapContext: jest.fn()
 }));
 
