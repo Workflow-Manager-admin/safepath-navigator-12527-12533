@@ -76,6 +76,7 @@ SafePath Navigator requires certain environment variables to function properly:
 ### Required Environment Variables
 
 1. `REACT_APP_GOOGLE_MAPS_API_KEY` - Google Maps API Key with Maps JavaScript API enabled
+2. `REACT_APP_FBI_CRIME_DATA_API_KEY` - FBI Crime Data API Key for safety scoring (provided: 2kEBAO7elawjoAAKFdgfErFxPS8ODR8zCW6xTkjx)
 
 ### Setting Up Environment Variables
 
