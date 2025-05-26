@@ -48,26 +48,26 @@ const Map = () => {
 
   // Define origin marker options
   const originMarkerOptions = {
-    icon: {
-      path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
+    icon: isLoaded && window.google?.maps?.SymbolPath ? {
+      path: window.google.maps.SymbolPath.CIRCLE,
       fillColor: '#4285F4',
       fillOpacity: 1,
       strokeColor: '#ffffff',
       strokeWeight: 2,
       scale: 8
-    }
+    } : null
   };
 
   // Define destination marker options
   const destinationMarkerOptions = {
-    icon: {
-      path: window.google?.maps?.SymbolPath?.CIRCLE || 0,
+    icon: isLoaded && window.google?.maps?.SymbolPath ? {
+      path: window.google.maps.SymbolPath.CIRCLE,
       fillColor: '#EA4335',
       fillOpacity: 1,
       strokeColor: '#ffffff',
       strokeWeight: 2,
       scale: 8
-    }
+    } : null
   };
   
   // Define polyline options for the selected route
