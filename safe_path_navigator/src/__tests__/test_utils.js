@@ -168,30 +168,8 @@ export const mockFetchNetworkError = () => {
 
 // Custom render function for components that need MapContext
 export const renderWithMapContext = (ui, contextProps = {}) => {
-  const defaultContextProps = {
-    origin: null,
-    destination: null,
-    routes: [],
-    selectedRoute: null,
-    mapCenter: { lat: 37.7749, lng: -122.4194 },
-    zoom: 13,
-    isLoading: false,
-    showCrimeOverlay: false,
-    showLightingOverlay: false,
-    showEmergencyServices: false,
-    setOriginLocation: jest.fn(),
-    setDestinationLocation: jest.fn(),
-    setSelectedRoute: jest.fn(),
-    setMapCenter: jest.fn(),
-    setZoom: jest.fn(),
-    clearRoutes: jest.fn(),
-    toggleOverlay: jest.fn()
-  };
-
-  const mergedContextProps = { ...defaultContextProps, ...contextProps };
-
   return render(
-    <MapProvider value={mergedContextProps}>
+    <MapProvider>
       {ui}
     </MapProvider>
   );
