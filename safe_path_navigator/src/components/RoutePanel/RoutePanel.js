@@ -153,9 +153,26 @@ const RoutePanel = () => {
           <div className="route-detail-item">
             <strong>Overall Safety:</strong> {selectedRoute.safetyScore.overall}%
           </div>
-          <p className="safety-tip">
-            <FaShieldAlt /> Safety Tip: Stay in well-lit areas and be aware of your surroundings.
-          </p>
+          
+          {/* Display FBI Crime Data API safety recommendations if available */}
+          {selectedRoute.crimeData && (
+            <div className="safety-recommendations">
+              <h4><FaExclamationTriangle /> Safety Recommendations</h4>
+              <ul className="recommendations-list">
+                {getSafetyRecommendations(selectedRoute.crimeData).map((tip, index) => (
+                  <li key={`tip-${index}`} className="safety-tip">
+                    <FaShieldAlt /> {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+          
+          {!selectedRoute.crimeData && (
+            <p className="safety-tip">
+              <FaShieldAlt /> Safety Tip: Stay in well-lit areas and be aware of your surroundings.
+            </p>
+          )}
         </div>
       )}
     </div>
