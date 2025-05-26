@@ -2,7 +2,7 @@
  * Tests for safety recommendations display in RoutePanel component
  */
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import RoutePanel from '../components/RoutePanel/RoutePanel';
 import * as fbiCrimeDataService from '../services/fbiCrimeDataService';
@@ -200,11 +200,12 @@ describe('RoutePanel Safety Display', () => {
     expect(lightingButton.className).toContain('active');
     
     // Click the crime button
-    await user.click(crimeButton);
+    // Using fireEvent instead of userEvent for compatibility
+    fireEvent.click(crimeButton);
     expect(mockToggleOverlay).toHaveBeenCalledWith('crime');
     
     // Click the emergency services button
-    await user.click(servicesButton);
+    fireEvent.click(servicesButton);
     expect(mockToggleOverlay).toHaveBeenCalledWith('emergency');
   });
 
