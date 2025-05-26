@@ -129,8 +129,12 @@ describe('FBI Crime Data Service', () => {
 
   describe('getNationalCrimeTrends', () => {
     test('should fetch national crime trends data', async () => {
-      // Mock the fetch implementation
-      global.fetch = jest.fn().mockImplementation(mockFetch);
+      // Mock the fetch implementation to return expected data
+      global.fetch = jest.fn().mockImplementation(() => Promise.resolve({
+        ok: true,
+        status: 200,
+        json: () => Promise.resolve(mockNationalCrimeData)
+      }));
       
       const result = await getNationalCrimeTrends(2);
       
@@ -139,8 +143,8 @@ describe('FBI Crime Data Service', () => {
       expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/national/'));
       expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('?api_key='));
       
-      // Verify the result
-      expect(result).toEqual(expect.objectContaining({ results: expect.any(Array) }));
+      // Verify the result matches mock data
+      expect(result).toEqual(mockNationalCrimeData);
     });
     
     test('should handle API errors gracefully', async () => {
