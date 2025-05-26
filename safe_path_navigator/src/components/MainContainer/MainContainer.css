@@ -1,0 +1,234 @@
+/* Main container layout */
+.safe-path-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
+  background-color: #f5f5f5;
+}
+
+/* App header styling */
+.app-header {
+  background-color: #1A1A1A;
+  color: white;
+  padding: 16px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+}
+
+.logo {
+  font-size: 1.4rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-icon {
+  font-size: 1.2rem;
+}
+
+.toggle-panel {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1.2rem;
+  cursor: pointer;
+  padding: 8px;
+  border-radius: 4px;
+  display: none;
+}
+
+/* Main content area - map and sidebar */
+.app-content {
+  flex: 1;
+  display: flex;
+  overflow: hidden;
+}
+
+/* Side panel with search and routes */
+.side-panel {
+  width: 360px;
+  background-color: white;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease;
+  z-index: 5;
+}
+
+/* Map container */
+.map-wrapper {
+  flex: 1;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Search form styling */
+.search-form {
+  padding: 16px;
+  border-bottom: 1px solid #eee;
+  background-color: white;
+}
+
+.form-group {
+  margin-bottom: 12px;
+}
+
+.form-group label {
+  display: block;
+  font-size: 0.9rem;
+  color: #555;
+  margin-bottom: 4px;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+.search-form input {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+}
+
+.search-form input:focus {
+  border-color: #4285F4;
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.clear-input {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+.form-actions {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.btn-search {
+  flex: 1;
+  background-color: #4285F4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-search:hover {
+  background-color: #3367D6;
+}
+
+.btn-search:disabled {
+  background-color: #A8C7FA;
+  cursor: not-allowed;
+}
+
+.btn-clear {
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-clear:hover {
+  background-color: #eee;
+}
+
+.transport-mode {
+  display: flex;
+  gap: 8px;
+}
+
+.btn-mode {
+  flex: 1;
+  background-color: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 8px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.btn-mode:hover {
+  background-color: #eee;
+}
+
+.btn-mode.active {
+  background-color: #E87A41;
+  color: white;
+  border-color: #E87A41;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .toggle-panel {
+    display: block;
+  }
+  
+  .side-panel {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 85%;
+    max-width: 360px;
+    box-shadow: 2px 0 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .side-panel.hidden {
+    transform: translateX(-100%);
+  }
+  
+  .side-panel.visible {
+    transform: translateX(0);
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .btn-search, .btn-clear {
+    width: 100%;
+  }
+}
+
+/* For larger screens - adjust the layout */
+@media (min-width: 1200px) {
+  .side-panel {
+    width: 400px;
+  }
+}
