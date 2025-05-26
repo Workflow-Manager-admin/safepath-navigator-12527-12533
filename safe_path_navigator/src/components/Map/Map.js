@@ -41,10 +41,18 @@ const Map = () => {
   } = useMapContext();
 
   // Load the Google Maps JavaScript API
-  const { isLoaded } = useJsApiLoader({
+  const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''
   });
+
+  // For debugging purposes - can be removed in production
+  console.log("Google Maps API Key:", process.env.REACT_APP_GOOGLE_MAPS_API_KEY ? "Provided" : "Missing");
+  
+  // Handle Google Maps loading errors
+  if (loadError) {
+    console.error("Google Maps loading error:", loadError);
+  }
 
   // Define origin marker options
   const originMarkerOptions = {
