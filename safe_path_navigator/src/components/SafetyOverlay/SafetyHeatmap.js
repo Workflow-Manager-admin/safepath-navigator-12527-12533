@@ -8,8 +8,11 @@ import { mockCrimeData } from '../../utils/safetyUtils';
  * @PUBLIC_INTERFACE
  */
 const SafetyHeatmap = ({ visible = false }) => {
-  // Skip rendering if not visible or Google Maps is not loaded
-  if (!visible || typeof window.google === 'undefined') return null;
+  // Skip rendering if not visible
+  if (!visible) return null;
+  
+  // Skip if Google Maps is not loaded
+  if (typeof window === 'undefined' || !window.google || !window.google.maps) return null;
   
   // Options for the heatmap visualization
   const heatmapOptions = {
