@@ -164,6 +164,23 @@ const Map = () => {
     ));
   };
 
+  // Display an error message if there's a loading error
+  if (loadError) {
+    return (
+      <div className="map-loading" style={{ color: 'red', padding: '20px' }}>
+        <h3>Error Loading Google Maps</h3>
+        <p>There was an error loading Google Maps. This may be due to:</p>
+        <ul>
+          <li>Invalid API key</li>
+          <li>API key restrictions (domain, IP, etc.)</li>
+          <li>API key usage limits</li>
+          <li>Network connectivity issues</li>
+        </ul>
+        <p>Please check your console for more details.</p>
+      </div>
+    );
+  }
+
   return isLoaded ? (
     <div className="map-container">
       <GoogleMap
@@ -171,6 +188,7 @@ const Map = () => {
         center={mapCenter}
         zoom={zoom}
         options={mapOptions}
+        onLoad={() => console.log("Google Map successfully loaded")}
       >
         {/* Display origin marker if available */}
         {origin && (
