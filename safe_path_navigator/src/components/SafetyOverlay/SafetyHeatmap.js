@@ -42,9 +42,12 @@ const SafetyHeatmap = ({ visible = false }) => {
     weight: point.weight
   }));
 
+  // Extract just the location objects for the HeatmapLayer
+  const heatmapLocations = heatmapData.map(point => point.location);
+
   return (
     <HeatmapLayer
-      data={heatmapData.map(point => point.location)}
+      data={heatmapLocations}
       options={heatmapOptions}
     />
   );
