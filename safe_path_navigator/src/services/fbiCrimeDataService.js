@@ -6,7 +6,7 @@
 
 // FBI Crime Data API configuration
 const FBI_API_BASE_URL = 'https://api.usa.gov/crime/fbi/sapi';
-const API_KEY = '2kEBAO7elawjoAAKFdgfErFxPS8ODR8zCW6xTkjx';
+const API_KEY = process.env.REACT_APP_FBI_CRIME_DATA_API_KEY || '2kEBAO7elawjoAAKFdgfErFxPS8ODR8zCW6xTkjx';
 
 /**
  * Fetch crime statistics for a specific state and city
