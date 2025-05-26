@@ -2,6 +2,16 @@
  * Test utilities for SafePath Navigator tests
  * Contains mock data, mock API responses, and helper functions for testing
  */
+import { render } from '@testing-library/react';
+import { MapProvider } from '../context/MapContext';
+
+// Simple test to make Jest happy
+describe('Test utilities', () => {
+  test('mock data is properly defined', () => {
+    expect(mockCrimeDataResponse).toBeDefined();
+    expect(mockFetch).toBeDefined();
+  });
+});
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MapProvider } from '../context/MapContext';
