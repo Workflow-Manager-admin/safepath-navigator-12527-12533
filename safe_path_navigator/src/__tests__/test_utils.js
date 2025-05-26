@@ -2,6 +2,7 @@
  * Test utilities for SafePath Navigator tests
  * Contains mock data, mock API responses, and helper functions for testing
  */
+import React from 'react';
 import { render } from '@testing-library/react';
 import { MapProvider } from '../context/MapContext';
 
@@ -12,9 +13,6 @@ describe('Test utilities', () => {
     expect(mockFetch).toBeDefined();
   });
 });
-import React from 'react';
-import { render } from '@testing-library/react';
-import { MapProvider } from '../context/MapContext';
 
 // Mock crime data response from FBI API
 export const mockCrimeDataResponse = {
