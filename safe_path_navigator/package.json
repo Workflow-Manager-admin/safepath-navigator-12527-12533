@@ -14,7 +14,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "check-env": "node check-env.js",
+    "prestart": "npm run check-env"
   },
   "eslintConfig": {
     "extends": "react-app"
