@@ -49,7 +49,7 @@ const Map = () => {
   // For debugging purposes - can be removed in production
   console.log("Google Maps API Key:", process.env.REACT_APP_GOOGLE_MAPS_API_KEY ? "Provided" : "Missing");
   
-  // Handle Google Maps loading errors
+  // Log any Google Maps loading errors to the console
   if (loadError) {
     console.error("Google Maps loading error:", loadError);
   }
@@ -131,9 +131,11 @@ const Map = () => {
   };
   
   // Icon for street lights
-  const lightingIcon = {
+  const lightingIcon = isLoaded && window.google?.maps?.Size ? {
     url: 'https://maps.google.com/mapfiles/ms/icons/lightbulb.png',
-    scaledSize: window.google?.maps?.Size && new window.google.maps.Size(24, 24)
+    scaledSize: new window.google.maps.Size(24, 24)
+  } : {
+    url: 'https://maps.google.com/mapfiles/ms/icons/lightbulb.png'
   };
 
   // Render lighting data markers
