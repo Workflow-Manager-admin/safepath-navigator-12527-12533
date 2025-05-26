@@ -39,10 +39,67 @@ export const calculateSafetyScore = (routePath) => {
     return { overall: 0, crime: 0, lighting: 0 };
   }
 
-  // Mock safety score calculation based on route proximity to crime data
-  // In a real implementation, this would use actual algorithms and real data
-  const crimeScore = Math.random() * 100;
-  const lightingScore = Math.random() * 100;
+  // The actual implementation would use the FBI Crime Data API
+  // For now, we use locally weighted values based on crime data points
+  let crimeScore = 0;
+  let lightingScore = 0;
+  
+  // Calculate weighted score based on proximity to known crime areas
+  // For each point in the route, check distance to crime data points
+  routePath.forEach(routePoint => {
+    // Calculate crime score component based on proximity to crime data
+    let pointCrimeScore = 0;
+    
+    // Check distance to each crime data point
+    mockCrimeData.forEach(crimePoint => {
+      const distance = Math.sqrt(
+        Math.pow(routePoint.lat - crimePoint.lat, 2) + 
+        Math.pow(routePoint.lng - crimePoint.lng, 2)
+      );
+      
+      // Closer to crime point = lower safety score
+      // Weight is higher for higher crime weight
+      if (distance < 0.01) { // Within approximately 1km
+        pointCrimeScore += (crimePoint.weight * (1 - (distance * 100)));
+      }
+    });
+    
+    // Accumulate point score to total
+    crimeScore += pointCrimeScore;
+    
+    // Calculate lighting score component
+    let pointLightingScore = 0.5; // Default medium lighting
+    
+    // Check lighting at each route point
+    mockLightingData.forEach(lightPoint => {
+      const distance = Math.sqrt(
+        Math.pow(routePoint.lat - lightPoint.lat, 2) + 
+        Math.pow(routePoint.lng - lightPoint.lng, 2)
+      );
+      
+      // If near a light source, adjust lighting score
+      if (distance < 0.005) { // Within approximately 500m
+        if (lightPoint.level === 'high') {
+          pointLightingScore = Math.max(pointLightingScore, 0.9);
+        } else if (lightPoint.level === 'medium') {
+          pointLightingScore = Math.max(pointLightingScore, 0.6);
+        } else {
+          pointLightingScore = Math.max(pointLightingScore, 0.3);
+        }
+      }
+    });
+    
+    // Accumulate lighting score
+    lightingScore += pointLightingScore;
+  });
+  
+  // Average the scores over the route
+  crimeScore = (routePath.length > 0) ? 100 - ((crimeScore / routePath.length) * 100) : 50;
+  lightingScore = (routePath.length > 0) ? (lightingScore / routePath.length) * 100 : 50;
+  
+  // Ensure scores are in range 0-100
+  crimeScore = Math.max(0, Math.min(100, crimeScore));
+  lightingScore = Math.max(0, Math.min(100, lightingScore));
   
   // Weighted average favoring crime data slightly more than lighting
   const overallScore = (crimeScore * 0.6) + (lightingScore * 0.4);
