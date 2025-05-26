@@ -46,9 +46,7 @@ const Map = () => {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''
   });
 
-  // For debugging purposes - can be removed in production
-  console.log("Google Maps API Key:", process.env.REACT_APP_GOOGLE_MAPS_API_KEY ? "Provided" : "Missing");
-  
+
   // Log any Google Maps loading errors to the console
   if (loadError) {
     console.error("Google Maps loading error:", loadError);
@@ -109,21 +107,36 @@ const Map = () => {
   
   // Icon for emergency services
   const getEmergencyIcon = (type) => {
+    if (!isLoaded || !window.google?.maps?.Size) {
+      // Return basic icon without scaledSize if Google Maps isn't fully loaded
+      switch (type) {
+        case 'police':
+          return { url: 'https://maps.google.com/mapfiles/ms/icons/police.png' };
+        case 'hospital':
+          return { url: 'https://maps.google.com/mapfiles/ms/icons/hospitals.png' };
+        case 'fire_station':
+          return { url: 'https://maps.google.com/mapfiles/ms/icons/firedept.png' };
+        default:
+          return null;
+      }
+    }
+    
+    // If Google Maps is loaded, include scaledSize
     switch (type) {
       case 'police':
         return {
           url: 'https://maps.google.com/mapfiles/ms/icons/police.png',
-          scaledSize: window.google?.maps?.Size && new window.google.maps.Size(32, 32)
+          scaledSize: new window.google.maps.Size(32, 32)
         };
       case 'hospital':
         return {
           url: 'https://maps.google.com/mapfiles/ms/icons/hospitals.png',
-          scaledSize: window.google?.maps?.Size && new window.google.maps.Size(32, 32)
+          scaledSize: new window.google.maps.Size(32, 32)
         };
       case 'fire_station':
         return {
           url: 'https://maps.google.com/mapfiles/ms/icons/firedept.png',
-          scaledSize: window.google?.maps?.Size && new window.google.maps.Size(32, 32)
+          scaledSize: new window.google.maps.Size(32, 32)
         };
       default:
         return null;
