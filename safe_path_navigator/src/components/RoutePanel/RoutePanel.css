@@ -194,6 +194,25 @@
   font-size: 0.9rem;
 }
 
+.safety-recommendations {
+  margin-top: 12px;
+}
+
+.safety-recommendations h4 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  color: #333;
+}
+
+.recommendations-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
 .safety-tip {
   display: flex;
   align-items: center;
@@ -202,7 +221,7 @@
   padding: 8px;
   border-radius: 4px;
   font-size: 0.85rem;
-  margin-top: 12px;
+  margin-top: 8px;
   color: #4285F4;
 }
 
