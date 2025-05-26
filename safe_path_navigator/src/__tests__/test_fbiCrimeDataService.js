@@ -130,12 +130,20 @@ describe('FBI Crime Data Service', () => {
 
   describe('getNationalCrimeTrends', () => {
     test('should fetch national crime trends data', async () => {
-      // Mock the fetch implementation to return expected data
-      global.fetch = jest.fn().mockImplementation(() => Promise.resolve({
-        ok: true,
-        status: 200,
-        json: () => Promise.resolve(mockNationalCrimeData)
-      }));
+      // Mock the fetch implementation to return expected data - using custom implementation
+      // to ensure the correct data is returned
+      global.fetch = jest.fn().mockImplementation((url) => {
+        // Ensure we return mockNationalCrimeData for national endpoint
+        if (url.includes('/national/')) {
+          return Promise.resolve({
+            ok: true,
+            status: 200,
+            json: () => Promise.resolve(mockNationalCrimeData)
+          });
+        }
+        // Use default mockFetch implementation for other URLs
+        return mockFetch(url);
+      });
       
       const result = await getNationalCrimeTrends(2);
       
