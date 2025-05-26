@@ -14,6 +14,7 @@ Checking environment variables...
 Checking required environment variables:
 ======================================
 ✅ REACT_APP_GOOGLE_MAPS_API_KEY exists: AIza...
+✅ REACT_APP_FBI_CRIME_DATA_API_KEY exists: 2kEB...
 
 Checking NODE_ENV:
 =================
@@ -22,15 +23,17 @@ Checking NODE_ENV:
 React app environment variables:
 ===============================
 ✅ REACT_APP_GOOGLE_MAPS_API_KEY: AIza...
+✅ REACT_APP_FBI_CRIME_DATA_API_KEY: 2kEB...
 
 Security check:
 ==============
 ❗ Potential security issue: REACT_APP_GOOGLE_MAPS_API_KEY might contain sensitive data exposed to the browser
+❗ Potential security issue: REACT_APP_FBI_CRIME_DATA_API_KEY might contain sensitive data exposed to the browser
 
 Testing manual environment loading:
 =================================
 ✅ Successfully read .env file content
-✅ Found 1 environment variables in .env file
+✅ Found 2 environment variables in .env file
 ✅ REACT_APP_GOOGLE_MAPS_API_KEY format appears valid
 
 Verifying manual environment injection:
@@ -44,9 +47,9 @@ Environment Check Summary:
 > react-kavia@0.1.0 start
 > react-scripts start
 
-(node:6435) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:6872) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:6435) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:6872) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
 Compiled successfully!
@@ -59,51 +62,4 @@ You can now view react-kavia in the browser.
 Note that the development build is not optimized.
 To create a production build, use npm run build.
 
-webpack compiled successfully
-Compiling...
-Compiled successfully!
-webpack compiled successfully
-Compiling...
-Compiled with warnings.
-
-[eslint] 
-src/context/MapContext.js
-  Line 3:10:  'getCrimeStatsByCoordinates' is defined but never used  no-unused-vars
-
-Search for the keywords to learn more about each warning.
-To ignore, add // eslint-disable-next-line to the line before.
-
-WARNING in [eslint] 
-src/context/MapContext.js
-  Line 3:10:  'getCrimeStatsByCoordinates' is defined but never used  no-unused-vars
-
-webpack compiled with 1 warning
-Compiling...
-Compiled successfully!
-webpack compiled successfully
-Compiling...
-Compiled with warnings.
-
-[eslint] 
-src/components/RoutePanel/RoutePanel.js
-  Line 3:61:  'FaExclamationTriangle' is defined but never used     no-unused-vars
-  Line 4:10:  'getSafetyRecommendations' is defined but never used  no-unused-vars
-
-Search for the keywords to learn more about each warning.
-To ignore, add // eslint-disable-next-line to the line before.
-
-WARNING in [eslint] 
-src/components/RoutePanel/RoutePanel.js
-  Line 3:61:  'FaExclamationTriangle' is defined but never used     no-unused-vars
-  Line 4:10:  'getSafetyRecommendations' is defined but never used  no-unused-vars
-
-webpack compiled with 1 warning
-Compiling...
-Compiled successfully!
-webpack compiled successfully
-Compiling...
-Compiled successfully!
-webpack compiled successfully
-Compiling...
-Compiled successfully!
 webpack compiled successfully
