@@ -130,8 +130,33 @@ describe('FBI Crime Data Service', () => {
 
   describe('getNationalCrimeTrends', () => {
     test('should fetch national crime trends data', async () => {
-      // Mock fetch to use the default mockFetch implementation which handles /national/ URLs
-      global.fetch = jest.fn().mockImplementation(mockFetch);
+      // Create explicit mock response for national crime data
+      global.fetch = jest.fn().mockImplementation(() => {
+        return Promise.resolve({
+          ok: true,
+          status: 200,
+          json: () => Promise.resolve({
+            results: [
+              {
+                year: 2020,
+                violent_crime: 380.8,
+                homicide: 6.5,
+                robbery: 73.9,
+                aggravated_assault: 279.7,
+                property_crime: 1958.2
+              },
+              {
+                year: 2021,
+                violent_crime: 395.7,
+                homicide: 7.8,
+                robbery: 75.5,
+                aggravated_assault: 290.2,
+                property_crime: 2015.6
+              }
+            ]
+          })
+        });
+      });
       
       const result = await getNationalCrimeTrends(2);
       
@@ -140,8 +165,27 @@ describe('FBI Crime Data Service', () => {
       expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('/national/'));
       expect(global.fetch).toHaveBeenCalledWith(expect.stringContaining('?api_key='));
       
-      // Verify the result matches mock data
-      expect(result).toEqual(mockNationalCrimeData);
+      // Verify the result matches the expected data
+      expect(result).toEqual({
+        results: [
+          {
+            year: 2020,
+            violent_crime: 380.8,
+            homicide: 6.5,
+            robbery: 73.9,
+            aggravated_assault: 279.7,
+            property_crime: 1958.2
+          },
+          {
+            year: 2021,
+            violent_crime: 395.7,
+            homicide: 7.8,
+            robbery: 75.5,
+            aggravated_assault: 290.2,
+            property_crime: 2015.6
+          }
+        ]
+      });
     });
     
     test('should handle API errors gracefully', async () => {
