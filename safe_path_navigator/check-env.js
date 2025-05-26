@@ -34,7 +34,8 @@ if (fs.existsSync(envPath)) {
 
 // Check required environment variables
 const requiredVariables = [
-  'REACT_APP_GOOGLE_MAPS_API_KEY'
+  'REACT_APP_GOOGLE_MAPS_API_KEY',
+  'REACT_APP_FBI_CRIME_DATA_API_KEY'
 ];
 
 console.log('\nChecking required environment variables:');
