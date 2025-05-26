@@ -11,7 +11,8 @@ import {
   mockCrimeDataResponse, 
   mockFetch, 
   mockFetchError,
-  mockFetchNetworkError 
+  mockFetchNetworkError,
+  mockNationalCrimeData
 } from './test_utils';
 
 describe('FBI Crime Data Service', () => {
