@@ -1,6 +1,7 @@
 import React from 'react';
 import { useMapContext } from '../../context/MapContext';
-import { FaWalking, FaCar, FaShieldAlt, FaLightbulb, FaSun } from 'react-icons/fa';
+import { FaWalking, FaCar, FaShieldAlt, FaLightbulb, FaSun, FaExclamationTriangle } from 'react-icons/fa';
+import { getSafetyRecommendations } from '../../services/fbiCrimeDataService';
 import './RoutePanel.css';
 
 /**
