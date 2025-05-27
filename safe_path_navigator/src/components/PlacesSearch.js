@@ -4,6 +4,10 @@ import { FaSearch, FaTimes, FaHistory, FaMapMarkerAlt, FaStar, FaSpinner, FaAngl
          FaGlobe, FaPhone, FaClock, FaCamera, FaComment, FaExternalLinkAlt } from 'react-icons/fa';
 import '../components/MainContainer/MainContainer.css';
 
+// Define libraries array as a constant to prevent unnecessary re-renders
+// This is important for Google Maps API components
+const libraries = ['places'];
+
 // Use REACT_APP_GOOGLE_PLACES_API_KEY if available, otherwise fall back to REACT_APP_GOOGLE_MAPS_API_KEY
 const GOOGLE_PLACES_API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY || process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
