@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { Autocomplete } from '@react-google-maps/api';
-import { FaSearch, FaTimes, FaHistory, FaMapMarkerAlt, FaStar, FaSpinner, FaAngleRight } from 'react-icons/fa';
+import { FaSearch, FaTimes, FaHistory, FaMapMarkerAlt, FaStar, FaSpinner, FaAngleRight, 
+         FaGlobe, FaPhone, FaClock, FaCamera, FaComment, FaExternalLinkAlt } from 'react-icons/fa';
 import '../components/MainContainer/MainContainer.css';
 
 // Use REACT_APP_GOOGLE_PLACES_API_KEY if available, otherwise fall back to REACT_APP_GOOGLE_MAPS_API_KEY
@@ -105,6 +106,9 @@ const PlacesSearch = ({
   const [searchLocation, setSearchLocation] = useState(null);
   const [showResults, setShowResults] = useState(false);
   const [selectedResult, setSelectedResult] = useState(null);
+  const [placeDetails, setPlaceDetails] = useState(null);
+  const [detailsLoading, setDetailsLoading] = useState(false);
+  const [detailsError, setDetailsError] = useState(null);
   
   const autocompleteRef = useRef(null);
   const inputRef = useRef(null);
