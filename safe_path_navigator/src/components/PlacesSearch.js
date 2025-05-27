@@ -200,7 +200,17 @@ const PlacesSearch = ({
 
   // Handle place selection from autocomplete
   const handlePlaceSelect = useCallback(() => {
+    if (!autocompleteRef.current) {
+      console.error("Autocomplete ref is not available");
+      return;
+    }
+    
     const place = autocompleteRef.current.getPlace();
+    if (!place) {
+      console.warn("No place selected from autocomplete");
+      return;
+    }
+    
     if (place && place.formatted_address) {
       setSearchInput(place.formatted_address);
       
