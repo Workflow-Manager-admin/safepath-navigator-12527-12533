@@ -3,6 +3,9 @@ import { Autocomplete } from '@react-google-maps/api';
 import { FaSearch, FaTimes, FaHistory, FaMapMarkerAlt } from 'react-icons/fa';
 import '../components/MainContainer/MainContainer.css';
 
+// Use REACT_APP_GOOGLE_PLACES_API_KEY if available, otherwise fall back to REACT_APP_GOOGLE_MAPS_API_KEY
+const GOOGLE_PLACES_API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY || process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+
 /**
  * Utility function to extract address components from Google Places result
  * 
