@@ -27,15 +27,23 @@ const SearchForm = () => {
       // Geocode origin address if provided
       if (originInput) {
         setIsGeocodingOrigin(true);
+        console.log(`Attempting to geocode origin: "${originInput}"`);
         const originCoords = await geocodeAddress(originInput);
         setIsGeocodingOrigin(false);
         
         if (originCoords) {
           setOriginLocation(originCoords);
           setMapCenter(originCoords); // Update map center to the origin
-          console.log("Origin geocoded:", originCoords);
+          console.log("Origin geocoded successfully:", originCoords);
         } else {
-          setGeocodeError(`Could not find coordinates for origin address: "${originInput}"`);
+          // Provide more helpful error message for specific addresses
+          if (originInput.includes('Military Trail')) {
+            setGeocodeError(
+              `Could not find coordinates for "${originInput}". Try adding city and state (e.g., "5539 N Military Trail, West Palm Beach, FL")`
+            );
+          } else {
+            setGeocodeError(`Could not find coordinates for origin address: "${originInput}"`);
+          }
           return;
         }
       }
@@ -43,6 +51,7 @@ const SearchForm = () => {
       // Geocode destination address if provided
       if (destinationInput) {
         setIsGeocodingDestination(true);
+        console.log(`Attempting to geocode destination: "${destinationInput}"`);
         const destCoords = await geocodeAddress(destinationInput);
         setIsGeocodingDestination(false);
         
@@ -51,9 +60,16 @@ const SearchForm = () => {
           if (!originInput) {
             setMapCenter(destCoords); // If no origin, center on destination
           }
-          console.log("Destination geocoded:", destCoords);
+          console.log("Destination geocoded successfully:", destCoords);
         } else {
-          setGeocodeError(`Could not find coordinates for destination address: "${destinationInput}"`);
+          // Provide more helpful error message for specific addresses
+          if (destinationInput.includes('Military Trail')) {
+            setGeocodeError(
+              `Could not find coordinates for "${destinationInput}". Try adding city and state (e.g., "5539 N Military Trail, West Palm Beach, FL")`
+            );
+          } else {
+            setGeocodeError(`Could not find coordinates for destination address: "${destinationInput}"`);
+          }
           return;
         }
       }
