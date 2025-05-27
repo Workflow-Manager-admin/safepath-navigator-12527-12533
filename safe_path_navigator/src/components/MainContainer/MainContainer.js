@@ -212,7 +212,27 @@ const MainContainer = () => {
         <div className="app-content">
           <aside className={`side-panel ${showPanel ? 'visible' : 'hidden'}`}>
             <SearchForm />
-            <RoutePanel />
+            
+            <div className="panel-tabs">
+              <button 
+                className={`panel-tab ${activeTab === 'routes' ? 'active' : ''}`}
+                onClick={() => setActiveTab('routes')}
+              >
+                <FaRoute /> Routes
+              </button>
+              <button 
+                className={`panel-tab ${activeTab === 'places' ? 'active' : ''}`}
+                onClick={() => setActiveTab('places')}
+              >
+                <FaMapMarkerAlt /> Places
+              </button>
+            </div>
+            
+            {activeTab === 'routes' ? (
+              <RoutePanel />
+            ) : (
+              <PlacesPanel />
+            )}
           </aside>
           
           <main className="map-wrapper">
