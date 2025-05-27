@@ -1,4 +1,5 @@
 import React from 'react';
+import Map from '../Map/Map';
 import './MainContainer.css';
 
 /**
@@ -28,7 +29,7 @@ function MainContainer() {
       {/* Main map area */}
       <div className="map-panel">
         {/* Map view will be rendered here */}
-        <div className="map-placeholder">[ Map will appear here ]</div>
+        <Map />
       </div>
       {/* Route Summary (collapsible for mobile) */}
       <div className="route-summary-panel">
