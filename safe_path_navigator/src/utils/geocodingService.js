@@ -154,3 +154,36 @@ export const isValidAddressFormat = (address) => {
   // Simple validation - check if address is at least 5 characters and contains numbers or letters
   return address.trim().length >= 5 && /[a-zA-Z0-9]/.test(address);
 };
+
+/**
+ * Format an address for better geocoding results
+ * Helps standardize address formats and add missing components
+ * 
+ * @PUBLIC_INTERFACE
+ * @param {string} address - Raw address string
+ * @returns {string} - Formatted address for geocoding
+ */
+export const formatAddressForGeocoding = (address) => {
+  if (!address) return '';
+  
+  let formattedAddress = address.trim();
+  
+  // Handle common address abbreviations
+  formattedAddress = formattedAddress
+    .replace(/\bN\b\s+/i, 'North ')
+    .replace(/\bS\b\s+/i, 'South ')
+    .replace(/\bE\b\s+/i, 'East ')
+    .replace(/\bW\b\s+/i, 'West ')
+    .replace(/\bSt\b/i, 'Street')
+    .replace(/\bRd\b/i, 'Road')
+    .replace(/\bAve\b/i, 'Avenue')
+    .replace(/\bBlvd\b/i, 'Boulevard')
+    .replace(/\bPkwy\b/i, 'Parkway');
+  
+  // Add USA as default country if not present
+  if (!formattedAddress.includes('USA') && !formattedAddress.includes('US')) {
+    formattedAddress = `${formattedAddress}, USA`;
+  }
+  
+  return formattedAddress;
+};
