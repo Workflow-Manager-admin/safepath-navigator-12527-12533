@@ -2,36 +2,66 @@ import React, { useState } from 'react';
 import { MapProvider } from '../../context/MapContext';
 import Map from '../Map/Map';
 import RoutePanel from '../RoutePanel/RoutePanel';
-import { FaSearch, FaTimes, FaWalking, FaCar, FaBars } from 'react-icons/fa';
+import { FaSearch, FaTimes, FaWalking, FaCar, FaBars, FaSpinner } from 'react-icons/fa';
 import { useMapContext } from '../../context/MapContext';
+import { geocodeAddress } from '../../utils/geocodingService';
 import './MainContainer.css';
 
 /**
  * Search form component for origin and destination input
  */
 const SearchForm = () => {
-  const { setOriginLocation, setDestinationLocation, clearRoutes, origin, destination } = useMapContext();
+  const { setOriginLocation, setDestinationLocation, clearRoutes, origin, destination, setMapCenter } = useMapContext();
   const [originInput, setOriginInput] = useState('');
   const [destinationInput, setDestinationInput] = useState('');
+  const [isGeocodingOrigin, setIsGeocodingOrigin] = useState(false);
+  const [isGeocodingDestination, setIsGeocodingDestination] = useState(false);
+  const [geocodeError, setGeocodeError] = useState(null);
 
   // Handle form submission
-  const handleSearchSubmit = (e) => {
+  const handleSearchSubmit = async (e) => {
     e.preventDefault();
+    setGeocodeError(null);
     
-    // In a real app, this would geocode the addresses
-    // For demo, we'll use mock coordinates
-    if (originInput) {
-      setOriginLocation({
-        lat: 37.7749,
-        lng: -122.4194
-      });
-    }
-    
-    if (destinationInput) {
-      setDestinationLocation({
-        lat: 37.7833,
-        lng: -122.4167
-      });
+    try {
+      // Geocode origin address if provided
+      if (originInput) {
+        setIsGeocodingOrigin(true);
+        const originCoords = await geocodeAddress(originInput);
+        setIsGeocodingOrigin(false);
+        
+        if (originCoords) {
+          setOriginLocation(originCoords);
+          setMapCenter(originCoords); // Update map center to the origin
+          console.log("Origin geocoded:", originCoords);
+        } else {
+          setGeocodeError(`Could not find coordinates for origin address: "${originInput}"`);
+          return;
+        }
+      }
+      
+      // Geocode destination address if provided
+      if (destinationInput) {
+        setIsGeocodingDestination(true);
+        const destCoords = await geocodeAddress(destinationInput);
+        setIsGeocodingDestination(false);
+        
+        if (destCoords) {
+          setDestinationLocation(destCoords);
+          if (!originInput) {
+            setMapCenter(destCoords); // If no origin, center on destination
+          }
+          console.log("Destination geocoded:", destCoords);
+        } else {
+          setGeocodeError(`Could not find coordinates for destination address: "${destinationInput}"`);
+          return;
+        }
+      }
+    } catch (error) {
+      console.error("Geocoding error:", error);
+      setGeocodeError("An error occurred while geocoding the addresses. Please try again.");
+      setIsGeocodingOrigin(false);
+      setIsGeocodingDestination(false);
     }
   };
 
