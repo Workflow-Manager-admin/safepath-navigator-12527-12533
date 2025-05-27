@@ -1,247 +1,45 @@
-import React, { useState } from 'react';
-import { MapProvider } from '../../context/MapContext';
-import Map from '../Map/Map';
-import RoutePanel from '../RoutePanel/RoutePanel';
-import PlacesPanel from '../PlacesPanel/PlacesPanel';
-import { FaSearch, FaTimes, FaWalking, FaCar, FaBars, FaSpinner, FaRoute, FaMapMarkerAlt } from 'react-icons/fa';
-import { useMapContext } from '../../context/MapContext';
-import { geocodeAddress } from '../../utils/geocodingService';
+import React from 'react';
 import './MainContainer.css';
 
 /**
- * Search form component for origin and destination input
+ * PUBLIC_INTERFACE
+ * Main container for SafePath Navigator.
+ * This lays out the full-screen experience:
+ * - Top or side panel for address (start/destination) input using autocomplete.
+ * - Main map area for route display and overlays.
+ * - Route summary panel (collapsible) for route selection/scores.
+ * Responsive for mobile & desktop.
  */
-const SearchForm = () => {
-  const { setOriginLocation, setDestinationLocation, clearRoutes, origin, destination, setMapCenter } = useMapContext();
-  const [originInput, setOriginInput] = useState('');
-  const [destinationInput, setDestinationInput] = useState('');
-  const [isGeocodingOrigin, setIsGeocodingOrigin] = useState(false);
-  const [isGeocodingDestination, setIsGeocodingDestination] = useState(false);
-  const [geocodeError, setGeocodeError] = useState(null);
-
-  // Handle form submission
-  const handleSearchSubmit = async (e) => {
-    e.preventDefault();
-    setGeocodeError(null);
-    
-    try {
-      // Geocode origin address if provided
-      if (originInput) {
-        setIsGeocodingOrigin(true);
-        console.log(`Attempting to geocode origin: "${originInput}"`);
-        const originCoords = await geocodeAddress(originInput);
-        setIsGeocodingOrigin(false);
-        
-        if (originCoords) {
-          setOriginLocation(originCoords);
-          setMapCenter(originCoords); // Update map center to the origin
-          console.log("Origin geocoded successfully:", originCoords);
-        } else {
-          // Provide more helpful error message for specific addresses
-          if (originInput.includes('Military Trail')) {
-            setGeocodeError(
-              `Could not find coordinates for "${originInput}". Try adding city and state (e.g., "5539 N Military Trail, West Palm Beach, FL")`
-            );
-          } else {
-            setGeocodeError(`Could not find coordinates for origin address: "${originInput}"`);
-          }
-          return;
-        }
-      }
-      
-      // Geocode destination address if provided
-      if (destinationInput) {
-        setIsGeocodingDestination(true);
-        console.log(`Attempting to geocode destination: "${destinationInput}"`);
-        const destCoords = await geocodeAddress(destinationInput);
-        setIsGeocodingDestination(false);
-        
-        if (destCoords) {
-          setDestinationLocation(destCoords);
-          if (!originInput) {
-            setMapCenter(destCoords); // If no origin, center on destination
-          }
-          console.log("Destination geocoded successfully:", destCoords);
-        } else {
-          // Provide more helpful error message for specific addresses
-          if (destinationInput.includes('Military Trail')) {
-            setGeocodeError(
-              `Could not find coordinates for "${destinationInput}". Try adding city and state (e.g., "5539 N Military Trail, West Palm Beach, FL")`
-            );
-          } else {
-            setGeocodeError(`Could not find coordinates for destination address: "${destinationInput}"`);
-          }
-          return;
-        }
-      }
-    } catch (error) {
-      console.error("Geocoding error:", error);
-      setGeocodeError("An error occurred while geocoding the addresses. Please try again.");
-      setIsGeocodingOrigin(false);
-      setIsGeocodingDestination(false);
-    }
-  };
-
-  // Clear all route data
-  const handleClearSearch = () => {
-    setOriginInput('');
-    setDestinationInput('');
-    clearRoutes();
-    setGeocodeError(null);
-  };
-
+function MainContainer() {
   return (
-    <form className="search-form" onSubmit={handleSearchSubmit}>
-      <div className="form-group">
-        <label htmlFor="origin">Start:</label>
-        <div className="input-wrapper">
-          <input
-            type="text"
-            id="origin"
-            placeholder="Enter starting point"
-            value={originInput}
-            onChange={(e) => setOriginInput(e.target.value)}
-            disabled={isGeocodingOrigin || isGeocodingDestination}
-          />
-          {isGeocodingOrigin ? (
-            <span className="input-icon spinning">
-              <FaSpinner />
-            </span>
-          ) : origin && (
-            <button 
-              type="button" 
-              className="clear-input"
-              onClick={() => {
-                setOriginInput('');
-                setOriginLocation(null);
-              }}
-            >
-              <FaTimes />
-            </button>
-          )}
+    <div className="main-container">
+      {/* Address Input Panel */}
+      <div className="address-panel">
+        {/* Start and Destination input panels (autocomplete to be implemented) */}
+        <div className="address-input start">
+          <label htmlFor="start-location">Start</label>
+          <input id="start-location" placeholder="Enter start location" />
+        </div>
+        <div className="address-input destination">
+          <label htmlFor="destination-location">Destination</label>
+          <input id="destination-location" placeholder="Enter destination" />
         </div>
       </div>
-      
-      <div className="form-group">
-        <label htmlFor="destination">End:</label>
-        <div className="input-wrapper">
-          <input
-            type="text"
-            id="destination"
-            placeholder="Enter destination"
-            value={destinationInput}
-            onChange={(e) => setDestinationInput(e.target.value)}
-            disabled={isGeocodingOrigin || isGeocodingDestination}
-          />
-          {isGeocodingDestination ? (
-            <span className="input-icon spinning">
-              <FaSpinner />
-            </span>
-          ) : destination && (
-            <button 
-              type="button" 
-              className="clear-input"
-              onClick={() => {
-                setDestinationInput('');
-                setDestinationLocation(null);
-              }}
-            >
-              <FaTimes />
-            </button>
-          )}
-        </div>
+      {/* Main map area */}
+      <div className="map-panel">
+        {/* Map view will be rendered here */}
+        <div className="map-placeholder">[ Map will appear here ]</div>
       </div>
-      
-      {geocodeError && (
-        <div className="geocode-error">
-          <p>{geocodeError}</p>
-        </div>
-      )}
-      
-      <div className="form-actions">
-        <button 
-          type="submit" 
-          className="btn-search" 
-          disabled={(!originInput && !destinationInput) || isGeocodingOrigin || isGeocodingDestination}
-        >
-          {(isGeocodingOrigin || isGeocodingDestination) ? <FaSpinner className="spinning" /> : <FaSearch />}
-          {(isGeocodingOrigin || isGeocodingDestination) ? ' Searching...' : ' Find Routes'}
-        </button>
-        
-        {(origin || destination) && (
-          <button type="button" className="btn-clear" onClick={handleClearSearch}>
-            <FaTimes /> Clear
-          </button>
-        )}
+      {/* Route Summary (collapsible for mobile) */}
+      <div className="route-summary-panel">
+        {/* List of routes/rows (placeholder) */}
+        <div className="route-summary-header">Available Routes:</div>
+        <ul className="route-list">
+          <li className="route-item">Route 1 - Safety: --, ETA: --, Distance: -- <button>Choose</button></li>
+        </ul>
       </div>
-      
-      <div className="transport-mode">
-        <button type="button" className="btn-mode active">
-          <FaWalking /> Walking
-        </button>
-        <button type="button" className="btn-mode">
-          <FaCar /> Driving
-        </button>
-      </div>
-    </form>
+    </div>
   );
-};
-
-/**
- * MainContainer is the primary component for SafePath Navigator
- * It integrates the map, route panel, and search functionality
- * @PUBLIC_INTERFACE
- */
-const MainContainer = () => {
-  const [showPanel, setShowPanel] = useState(true);
-  const [activeTab, setActiveTab] = useState('routes');
-  
-  return (
-    <MapProvider>
-      <div className="safe-path-container">
-        <header className="app-header">
-          <div className="logo">
-            <span className="logo-icon">🛡️</span>
-            SafePath Navigator
-          </div>
-          <button className="toggle-panel" onClick={() => setShowPanel(!showPanel)}>
-            <FaBars />
-          </button>
-        </header>
-        
-        <div className="app-content">
-          <aside className={`side-panel ${showPanel ? 'visible' : 'hidden'}`}>
-            <SearchForm />
-            
-            <div className="panel-tabs">
-              <button 
-                className={`panel-tab ${activeTab === 'routes' ? 'active' : ''}`}
-                onClick={() => setActiveTab('routes')}
-              >
-                <FaRoute /> Routes
-              </button>
-              <button 
-                className={`panel-tab ${activeTab === 'places' ? 'active' : ''}`}
-                onClick={() => setActiveTab('places')}
-              >
-                <FaMapMarkerAlt /> Places
-              </button>
-            </div>
-            
-            {activeTab === 'routes' ? (
-              <RoutePanel />
-            ) : (
-              <PlacesPanel />
-            )}
-          </aside>
-          
-          <main className="map-wrapper">
-            <Map />
-          </main>
-        </div>
-      </div>
-    </MapProvider>
-  );
-};
+}
 
 export default MainContainer;
