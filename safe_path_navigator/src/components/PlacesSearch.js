@@ -1,12 +1,14 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Autocomplete } from '@react-google-maps/api';
 import { FaSearch, FaTimes, FaHistory, FaMapMarkerAlt, FaStar, FaSpinner, FaAngleRight, 
          FaGlobe, FaPhone, FaClock, FaCamera, FaComment, FaExternalLinkAlt } from 'react-icons/fa';
 import '../components/MainContainer/MainContainer.css';
 
-// Define libraries array as a constant to prevent unnecessary re-renders
-// This is important for Google Maps API components
-const libraries = ['places'];
+// Create a properly memoized libraries array using useMemo
+// This prevents unnecessary re-renders with the Google Maps API components
+const useGoogleMapsLibraries = () => {
+  return useMemo(() => ['places'], []);
+};
 
 // Use REACT_APP_GOOGLE_PLACES_API_KEY if available, otherwise fall back to REACT_APP_GOOGLE_MAPS_API_KEY
 const GOOGLE_PLACES_API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY || process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
@@ -123,6 +125,9 @@ const PlacesSearch = ({
   const historyDropdownRef = useRef(null);
   const resultsRef = useRef(null);
   const mapRef = useRef(null);
+  
+  // Use the memoized libraries array
+  const libraries = useGoogleMapsLibraries();
 
   // Load search history from localStorage on component mount
   useEffect(() => {
