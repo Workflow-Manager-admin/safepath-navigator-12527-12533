@@ -89,7 +89,7 @@ const PlacesPanel = () => {
                       <img
                         key={index}
                         src={photo.getUrl({ maxWidth: 400, maxHeight: 300 })}
-                        alt={`${placeDetails.name} - Photo ${index + 1}`}
+                        alt={`${placeDetails.name} ${index + 1}`}
                         className="place-photo"
                       />
                     ))}
