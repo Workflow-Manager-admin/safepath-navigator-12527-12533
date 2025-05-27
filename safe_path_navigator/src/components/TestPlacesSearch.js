@@ -33,6 +33,10 @@ const TestPlacesSearch = () => {
           It supports address search with suggestions, maintains search history, 
           and extracts address components like country, state, and city.
         </p>
+        <p>
+          <strong>API Key:</strong> Uses <code>REACT_APP_GOOGLE_PLACES_API_KEY</code> environment variable 
+          (falls back to <code>REACT_APP_GOOGLE_MAPS_API_KEY</code> if not available).
+        </p>
       </div>
       
       <div style={{ marginBottom: '30px' }}>
