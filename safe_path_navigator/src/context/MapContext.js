@@ -1,195 +1,217 @@
-import React, { createContext, useState, useContext, useEffect } from 'react';
-import { calculateSafetyScore, generateMockRoutes } from '../utils/safetyUtils';
+import React, { createContext, useState, useContext, useEffect, useCallback } from 'react';
+import { calculateSafetyScore } from '../utils/safetyUtils';
 import { getCrimeStatsByCoordinates } from '../services/fbiCrimeDataService';
 
-// Create a context for managing map state
+// Create context
 const MapContext = createContext();
 
 /**
- * Provider component for MapContext that manages state for the map and routes
+ * MapProvider component provides map-related state and functionality for the application
+ * 
  * @PUBLIC_INTERFACE
+ * @param {Object} props - Component props
+ * @param {ReactNode} props.children - Child components
+ * @returns {JSX.Element} MapProvider component
  */
 export const MapProvider = ({ children }) => {
-  // State for origin, destination, and selected locations
+  const [map, setMap] = useState(null);
   const [origin, setOrigin] = useState(null);
   const [destination, setDestination] = useState(null);
   const [routes, setRoutes] = useState([]);
   const [selectedRoute, setSelectedRoute] = useState(null);
-  
-  // Map display controls
-  const [showCrimeOverlay, setShowCrimeOverlay] = useState(false);
-  const [showLightingOverlay, setShowLightingOverlay] = useState(false);
-  const [showEmergencyServices, setShowEmergencyServices] = useState(false);
-
-  // Default map center (San Francisco)
-  const [mapCenter, setMapCenter] = useState({
-    lat: 37.7749,
-    lng: -122.4194
-  });
-
-  // Map view settings
-  const [zoom, setZoom] = useState(13);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+  const [showSafetyHeatmap, setShowSafetyHeatmap] = useState(false);
+  const [showSafetyMarkers, setShowSafetyMarkers] = useState(true);
+  const [travelMode, setTravelMode] = useState('WALKING');
+  
+  // Places-related state
+  const [selectedPlace, setSelectedPlace] = useState(null);
+  const [placeDetails, setPlaceDetails] = useState(null);
+  const [searchResults, setSearchResults] = useState([]);
+  const [placesService, setPlacesService] = useState(null);
 
-  // Update routes when origin or destination changes
+  // Initialize Places service when map is available
   useEffect(() => {
-    if (origin && destination) {
-      setIsLoading(true);
-      
-      // In a real app, this would be an API call to a routing service
-      // We're using mock data for demonstration
-      setTimeout(async () => {
-        const newRoutes = generateMockRoutes(origin, destination);
+    if (window.google && map) {
+      setPlacesService(new window.google.maps.places.PlacesService(map));
+    }
+  }, [map]);
+
+  // Calculate routes when origin, destination or travel mode changes
+  useEffect(() => {
+    if (!origin || !destination || !window.google) return;
+
+    const calculateRoutes = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
         
-        // Calculate safety scores for each route
-        const routesWithScores = await Promise.all(
-          newRoutes.map(async route => {
-            // For each route, get crime data for midpoint of route
-            const midpointIndex = Math.floor(route.path.length / 2);
-            const midpoint = route.path[midpointIndex] || origin;
+        const directionsService = new window.google.maps.DirectionsService();
+        
+        const result = await new Promise((resolve, reject) => {
+          directionsService.route(
+            {
+              origin: { lat: origin.lat, lng: origin.lng },
+              destination: { lat: destination.lat, lng: destination.lng },
+              travelMode: window.google.maps.TravelMode[travelMode],
+              provideRouteAlternatives: true,
+              optimizeWaypoints: false
+            },
+            (result, status) => {
+              if (status === 'OK') {
+                resolve(result);
+              } else {
+                reject(new Error(`Directions request failed: ${status}`));
+              }
+            }
+          );
+        });
+        
+        // Process and enhance routes with safety information
+        const processedRoutes = await Promise.all(
+          result.routes.map(async (route, index) => {
+            const points = route.overview_path.map(point => ({
+              lat: point.lat(),
+              lng: point.lng()
+            }));
             
-            // Get crime data from FBI API for the area
-            const crimeData = await getCrimeStatsByCoordinates(
-              midpoint.lat,
-              midpoint.lng, 
-              0.5 // 0.5 mile radius
+            // Sample points along the route for crime data
+            const sampleSize = Math.min(5, Math.max(3, Math.floor(points.length / 10)));
+            const sampledPoints = [];
+            
+            for (let i = 0; i < sampleSize; i++) {
+              const pointIndex = Math.floor(i * (points.length / sampleSize));
+              sampledPoints.push(points[pointIndex]);
+            }
+            
+            // Get crime data for the sampled points
+            const crimeDataPromises = sampledPoints.map(point =>
+              getCrimeStatsByCoordinates(point.lat, point.lng)
+                .catch(() => ({ violent_crime: 0, property_crime: 0 }))
             );
             
-            // Use local calculation for now, but incorporate crime data if available
-            const safetyScore = calculateSafetyScore(route.path);
+            const crimeDataResults = await Promise.all(crimeDataPromises);
             
-            // If we have crime data from the API, use it to influence safety score
-            if (crimeData && crimeData.safetyScore) {
-              // Blend API safety score with our calculated score
-              const apiSafetyWeight = 0.4; // Weight given to API data
-              
-              safetyScore.crime = Math.round(
-                (safetyScore.crime * (1 - apiSafetyWeight)) + 
-                (crimeData.safetyScore * apiSafetyWeight)
-              );
-              
-              // Recalculate overall score with new crime score
-              safetyScore.overall = Math.round(
-                (safetyScore.crime * 0.6) + (safetyScore.lighting * 0.4)
-              );
-            }
+            // Calculate safety score based on crime data
+            const safetyScore = calculateSafetyScore(crimeDataResults);
             
             return {
               ...route,
+              index,
+              points,
               safetyScore,
-              // Store crime data for potential display in UI
-              crimeData: crimeData || null
+              duration: route.legs.reduce((total, leg) => total + leg.duration.value, 0),
+              distance: route.legs.reduce((total, leg) => total + leg.distance.value, 0)
             };
           })
         );
         
-        setRoutes(routesWithScores);
+        setRoutes(processedRoutes);
         
-        // Select the first route by default
-        if (routesWithScores.length > 0) {
-          setSelectedRoute(routesWithScores[0]);
+        // Select the safest route by default
+        if (processedRoutes.length > 0) {
+          const safestRoute = [...processedRoutes].sort((a, b) => b.safetyScore - a.safetyScore)[0];
+          setSelectedRoute(safestRoute);
         }
         
         setIsLoading(false);
-      }, 1000); // Simulate network delay
-    }
-  }, [origin, destination]);
-  
-  // Reset the map when there are no routes
-  useEffect(() => {
-    if (routes.length === 0) {
-      setSelectedRoute(null);
-    }
-  }, [routes]);
+      } catch (err) {
+        setError(err.message);
+        setIsLoading(false);
+      }
+    };
 
-  /**
-   * Set a new origin location
-   * @param {Object} location - Location with lat and lng properties
-   * @PUBLIC_INTERFACE
-   */
-  const setOriginLocation = (location) => {
-    setOrigin(location);
-    if (!destination) {
-      setMapCenter(location);
-    }
-  };
+    calculateRoutes();
+  }, [origin, destination, travelMode]);
 
-  /**
-   * Set a new destination location
-   * @param {Object} location - Location with lat and lng properties
-   * @PUBLIC_INTERFACE
-   */
-  const setDestinationLocation = (location) => {
-    setDestination(location);
-    if (!origin) {
-      setMapCenter(location);
+  // Handle place selection from PlacesSearch component
+  const handlePlaceSelect = useCallback((place) => {
+    setSelectedPlace(place);
+    
+    if (placesService && place && place.place_id) {
+      placesService.getDetails(
+        {
+          placeId: place.place_id,
+          fields: [
+            'name', 'rating', 'formatted_address', 'formatted_phone_number',
+            'website', 'opening_hours', 'photos', 'reviews', 'price_level',
+            'geometry', 'place_id', 'types', 'user_ratings_total'
+          ]
+        },
+        (details, status) => {
+          if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+            setPlaceDetails(details);
+          } else {
+            setError(`Error fetching place details: ${status}`);
+          }
+        }
+      );
     }
-  };
+  }, [placesService]);
 
-  /**
-   * Clear all route data and reset the map
-   * @PUBLIC_INTERFACE
-   */
-  const clearRoutes = () => {
+  // Handle search results from PlacesSearch component
+  const handleSearchComplete = useCallback((results) => {
+    setSearchResults(results);
+  }, []);
+
+  // Reset the map context state
+  const resetState = useCallback(() => {
     setOrigin(null);
     setDestination(null);
     setRoutes([]);
     setSelectedRoute(null);
-  };
+    setError(null);
+    setSelectedPlace(null);
+    setPlaceDetails(null);
+    setSearchResults([]);
+  }, []);
 
-  /**
-   * Toggle a specific overlay on the map
-   * @param {string} overlayType - Type of overlay to toggle
-   * @PUBLIC_INTERFACE
-   */
-  const toggleOverlay = (overlayType) => {
-    switch (overlayType) {
-      case 'crime':
-        setShowCrimeOverlay(!showCrimeOverlay);
-        break;
-      case 'lighting':
-        setShowLightingOverlay(!showLightingOverlay);
-        break;
-      case 'emergency':
-        setShowEmergencyServices(!showEmergencyServices);
-        break;
-      default:
-        break;
+  // Set a location as either origin or destination
+  const setLocationAsOriginOrDestination = useCallback((location, type) => {
+    if (type === 'origin') {
+      setOrigin(location);
+    } else if (type === 'destination') {
+      setDestination(location);
     }
-  };
+  }, []);
 
-  // Value to be provided by the context
-  const contextValue = {
+  const value = {
+    map,
+    setMap,
     origin,
+    setOrigin,
     destination,
+    setDestination,
     routes,
     selectedRoute,
-    mapCenter,
-    zoom,
-    isLoading,
-    showCrimeOverlay,
-    showLightingOverlay,
-    showEmergencyServices,
-    setOriginLocation,
-    setDestinationLocation,
     setSelectedRoute,
-    setMapCenter,
-    setZoom,
-    clearRoutes,
-    toggleOverlay
+    isLoading,
+    error,
+    showSafetyHeatmap,
+    setShowSafetyHeatmap,
+    showSafetyMarkers,
+    setShowSafetyMarkers,
+    travelMode,
+    setTravelMode,
+    resetState,
+    // Places-related values
+    selectedPlace,
+    setSelectedPlace: handlePlaceSelect,
+    placeDetails,
+    searchResults,
+    handleSearchComplete,
+    setLocationAsOriginOrDestination
   };
 
-  return (
-    <MapContext.Provider value={contextValue}>
-      {children}
-    </MapContext.Provider>
-  );
+  return <MapContext.Provider value={value}>{children}</MapContext.Provider>;
 };
 
 /**
- * Custom hook to use the MapContext
- * @returns {Object} The MapContext value
+ * Hook to access the MapContext
+ * 
  * @PUBLIC_INTERFACE
+ * @returns {Object} MapContext values and functions
  */
 export const useMapContext = () => {
   const context = useContext(MapContext);
