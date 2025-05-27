@@ -119,6 +119,38 @@
   animation: spin 1s linear infinite;
 }
 
+/* Places Search Dropdown Styles */
+.pac-container {
+  border-radius: 0 0 4px 4px;
+  border: 1px solid #ddd;
+  border-top: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  font-family: inherit;
+}
+
+.pac-item {
+  padding: 8px 10px;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.pac-item:hover {
+  background-color: #f5f5f5;
+}
+
+.pac-item-query {
+  font-size: 0.9rem;
+  color: #333;
+}
+
+.pac-matched {
+  font-weight: bold;
+}
+
+.pac-icon {
+  margin-right: 8px;
+}
+
 @keyframes spin {
   0% { transform: translateY(-50%) rotate(0deg); }
   100% { transform: translateY(-50%) rotate(360deg); }
