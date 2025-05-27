@@ -480,10 +480,9 @@ const PlacesSearch = ({
               autocompleteRef.current = autocomplete;
             }}
             onPlaceChanged={handlePlaceSelect}
-            restrictions={{ country: [] }} // No country restrictions for global search
             options={{
               types: ['geocode', 'establishment'], // Allow both addresses and places
-              fields: ['place_id', 'formatted_address', 'address_components', 'geometry']
+              fields: ['place_id', 'formatted_address', 'address_components', 'geometry', 'name']
             }}
           >
             <input
