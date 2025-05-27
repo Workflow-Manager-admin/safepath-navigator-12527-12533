@@ -348,29 +348,80 @@ const PlacesSearch = ({
   // Handle selection of a place from search results
   const handlePlaceResultClick = (placeResult) => {
     setSelectedResult(placeResult);
+    setDetailsLoading(true);
+    setDetailsError(null);
+    setPlaceDetails(null);
     
     // If we have a callback for result selection, call it
     if (onPlaceResultSelect && typeof onPlaceResultSelect === 'function') {
       onPlaceResultSelect(placeResult);
     }
     
-    // Optionally fetch more details about the place
+    // Fetch detailed information about the place
     if (placesService && placeResult.place_id) {
       placesService.getDetails({
         placeId: placeResult.place_id,
-        fields: ['name', 'formatted_address', 'formatted_phone_number', 'geometry', 'rating', 
-                 'user_ratings_total', 'website', 'photos', 'opening_hours', 'reviews',
-                 'address_components']
-      }, (placeDetails, status) => {
-        if (status === window.google.maps.places.PlacesServiceStatus.OK) {
+        fields: [
+          'name', 'formatted_address', 'formatted_phone_number', 'geometry', 'rating', 
+          'user_ratings_total', 'website', 'photos', 'opening_hours', 'reviews',
+          'address_components', 'url', 'types', 'price_level', 'international_phone_number',
+          'utc_offset_minutes'
+        ]
+      }, (details, status) => {
+        setDetailsLoading(false);
+        
+        if (status === window.google.maps.places.PlacesServiceStatus.OK && details) {
+          // Store the detailed place information in state
+          setPlaceDetails(details);
+          
           // If we have a callback for result selection with details, call it
           if (onPlaceResultSelect && typeof onPlaceResultSelect === 'function') {
-            const addressDetails = extractAddressComponents(placeDetails.address_components);
-            onPlaceResultSelect(placeDetails, addressDetails);
+            const addressDetails = extractAddressComponents(details.address_components);
+            onPlaceResultSelect(details, addressDetails);
           }
+        } else {
+          console.error('Failed to fetch place details:', status);
+          setDetailsError(`Failed to load place details: ${status}`);
         }
       });
+    } else {
+      setDetailsLoading(false);
+      setDetailsError('Places service unavailable or invalid place ID');
     }
+  };
+  
+  // Helper function to format opening hours
+  const formatOpeningHours = (openingHours) => {
+    if (!openingHours || !openingHours.weekday_text || openingHours.weekday_text.length === 0) {
+      return null;
+    }
+    
+    // Get current day of week (0 = Sunday, 6 = Saturday)
+    const now = new Date();
+    const dayOfWeek = now.getDay();
+    
+    // Reorder the weekday_text array to start with the current day
+    const reorderedWeekdays = [...openingHours.weekday_text.slice(dayOfWeek), ...openingHours.weekday_text.slice(0, dayOfWeek)];
+    
+    return reorderedWeekdays;
+  };
+  
+  // Helper function to format place types into readable categories
+  const formatPlaceTypes = (types) => {
+    if (!types || types.length === 0) return null;
+    
+    // Filter out generic types
+    const genericTypes = ['establishment', 'point_of_interest', 'place_of_worship', 'political'];
+    const relevantTypes = types.filter(type => !genericTypes.includes(type));
+    
+    if (relevantTypes.length === 0) return null;
+    
+    // Convert to readable format
+    return relevantTypes
+      .map(type => type.replace(/_/g, ' '))
+      .map(type => type.charAt(0).toUpperCase() + type.slice(1))
+      .slice(0, 3)
+      .join(' • ');
   };
 
   // Render error if Google Maps API is not loaded
