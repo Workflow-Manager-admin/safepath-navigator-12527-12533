@@ -23,17 +23,19 @@ Checking NODE_ENV:
 React app environment variables:
 ===============================
 ✅ REACT_APP_GOOGLE_MAPS_API_KEY: AIza...
+✅ REACT_APP_GOOGLE_PLACES_API_KEY: AIza...
 ✅ REACT_APP_FBI_CRIME_DATA_API_KEY: 2kEB...
 
 Security check:
 ==============
 ❗ Potential security issue: REACT_APP_GOOGLE_MAPS_API_KEY might contain sensitive data exposed to the browser
+❗ Potential security issue: REACT_APP_GOOGLE_PLACES_API_KEY might contain sensitive data exposed to the browser
 ❗ Potential security issue: REACT_APP_FBI_CRIME_DATA_API_KEY might contain sensitive data exposed to the browser
 
 Testing manual environment loading:
 =================================
 ✅ Successfully read .env file content
-✅ Found 2 environment variables in .env file
+✅ Found 3 environment variables in .env file
 ✅ REACT_APP_GOOGLE_MAPS_API_KEY format appears valid
 
 Verifying manual environment injection:
@@ -47,9 +49,9 @@ Environment Check Summary:
 > react-kavia@0.1.0 start
 > react-scripts start
 
-(node:5180) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:5460) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:5180) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:5460) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
 Compiled successfully!
