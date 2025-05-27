@@ -753,7 +753,7 @@ const PlacesSearch = ({
                         <h4>Opening Hours</h4>
                       </div>
                       
-                      {placeDetails.opening_hours?.isOpen && (
+                      {placeDetails.opening_hours?.isOpen && typeof placeDetails.opening_hours.isOpen === 'function' && (
                         <div className="open-now">
                           {placeDetails.opening_hours.isOpen() ? (
                             <span className="open">Open Now</span>
