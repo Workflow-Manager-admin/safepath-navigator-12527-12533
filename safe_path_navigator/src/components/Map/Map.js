@@ -43,7 +43,8 @@ const Map = () => {
   // Load the Google Maps JavaScript API
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || 'AIzaSyB9EUzePq61040cqu7tsofQ9pUFjmgOnbs'
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || 'AIzaSyB9EUzePq61040cqu7tsofQ9pUFjmgOnbs',
+    libraries: ['visualization']
   });
 
 
