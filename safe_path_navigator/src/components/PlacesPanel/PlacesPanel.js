@@ -12,9 +12,13 @@ import './PlacesPanel.css';
 const PlacesPanel = () => {
   const {
     map,
+    // We need the getter/setter for the place selection functionality
+    // eslint-disable-next-line no-unused-vars
     selectedPlace,
     setSelectedPlace,
     placeDetails,
+    // Used by the context but not directly in this component
+    // eslint-disable-next-line no-unused-vars
     searchResults,
     handleSearchComplete,
     setLocationAsOriginOrDestination

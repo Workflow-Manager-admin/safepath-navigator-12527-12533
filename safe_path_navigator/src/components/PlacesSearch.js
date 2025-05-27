@@ -128,8 +128,10 @@ const PlacesSearch = ({
   const resultsRef = useRef(null);
   const mapRef = useRef(null);
   
-  // Get the memoized libraries array (referenced in MapContext.js when loading the API)
-  const googleLibraries = useGoogleMapsLibraries();
+  // We don't directly use the memoized libraries array in this component
+  // It's only used in Map.js when loading the Google API
+  // eslint-disable-next-line no-unused-vars
+  const libraries = useGoogleMapsLibraries();
 
   // Load search history from localStorage on component mount
   useEffect(() => {
