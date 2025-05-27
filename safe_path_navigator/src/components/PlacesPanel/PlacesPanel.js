@@ -69,7 +69,7 @@ const PlacesPanel = () => {
             <h3>Find Places</h3>
             <PlacesSearch
               onPlaceSelect={setSelectedPlace}
-              onSearchComplete={handleSearchComplete}
+              onPlacesSearch={handleSearchComplete}
               mapInstance={map}
             />
           </div>
