@@ -194,6 +194,7 @@ const SearchForm = () => {
  */
 const MainContainer = () => {
   const [showPanel, setShowPanel] = useState(true);
+  const [activeTab, setActiveTab] = useState('routes');
   
   return (
     <MapProvider>
