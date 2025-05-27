@@ -76,6 +76,8 @@ const formatDistance = (meters) => {
  * @param {Function} props.onPlaceSelect - Callback function when a place is selected from autocomplete
  * @param {Function} props.onPlaceResultSelect - Callback function when a place is selected from search results
  * @param {Function} props.onPlacesSearch - Callback function when places search is performed
+ * @param {Function} props.onSearchComplete - Alternative callback when places search is completed (alias for onPlacesSearch)
+ * @param {Object} props.mapInstance - Optional Google Maps instance to use for Places Service
  * @param {string} props.placeholder - Placeholder text for the input
  * @param {string} props.id - ID for the input element
  * @param {string} props.label - Label for the input
@@ -89,6 +91,8 @@ const PlacesSearch = ({
   onPlaceSelect,
   onPlaceResultSelect,
   onPlacesSearch,
+  onSearchComplete,
+  mapInstance,
   placeholder = "Enter a location",
   id = "places-search",
   label = "Search",
