@@ -402,7 +402,9 @@ const PlacesSearch = ({
           
           // If we have a callback for result selection with details, call it
           if (onPlaceResultSelect && typeof onPlaceResultSelect === 'function') {
-            const addressDetails = extractAddressComponents(details.address_components);
+            const addressDetails = details.address_components ? 
+              extractAddressComponents(details.address_components) : 
+              { country: null, state: null, city: null };
             onPlaceResultSelect(details, addressDetails);
           }
         } else {
