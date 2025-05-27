@@ -10,8 +10,10 @@ const useGoogleMapsLibraries = () => {
   return useMemo(() => ['places'], []);
 };
 
-// Use REACT_APP_GOOGLE_PLACES_API_KEY if available, otherwise fall back to REACT_APP_GOOGLE_MAPS_API_KEY
-const GOOGLE_PLACES_API_KEY = process.env.REACT_APP_GOOGLE_PLACES_API_KEY || process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+// Google Maps API key is loaded from environment variables and used by the Map component
+// This component doesn't directly use the key, but notes it here for documentation
+// eslint-disable-next-line no-unused-vars
+const apiKey = process.env.REACT_APP_GOOGLE_PLACES_API_KEY || process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
 
 /**
  * Utility function to extract address components from Google Places result
