@@ -103,7 +103,7 @@
   box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
 }
 
-.clear-input {
+.clear-input, .input-icon {
   position: absolute;
   right: 10px;
   top: 50%;
@@ -113,6 +113,28 @@
   color: #999;
   cursor: pointer;
   font-size: 0.8rem;
+}
+
+.input-icon.spinning {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: translateY(-50%) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg); }
+}
+
+.geocode-error {
+  background-color: #f8d7da;
+  color: #721c24;
+  padding: 8px 12px;
+  margin-bottom: 12px;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.btn-search .spinning {
+  animation: spin 1s linear infinite;
 }
 
 .form-actions {
