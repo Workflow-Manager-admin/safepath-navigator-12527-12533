@@ -92,6 +92,7 @@ const PlacesSearch = ({
     } else {
       // If not loaded, we set error and component will display appropriate message
       setLoadError('Google Maps API not loaded');
+      console.log('Using API key from:', process.env.REACT_APP_GOOGLE_PLACES_API_KEY ? 'REACT_APP_GOOGLE_PLACES_API_KEY' : 'REACT_APP_GOOGLE_MAPS_API_KEY');
     }
 
     // Add click event listener to close history dropdown when clicking outside
