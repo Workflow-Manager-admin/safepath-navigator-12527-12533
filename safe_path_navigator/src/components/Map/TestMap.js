@@ -49,7 +49,8 @@ const TestMap = () => {
   // Load the Google Maps JavaScript API using environment variable for the API key
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || ''
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY || '',
+    libraries: ['visualization']
   });
 
   // Handle marker click to show InfoWindow
