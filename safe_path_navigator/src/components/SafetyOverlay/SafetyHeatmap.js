@@ -1,6 +1,7 @@
 import React from 'react';
 import { HeatmapLayer } from '@react-google-maps/api';
 import { mockCrimeData } from '../../utils/safetyUtils';
+// Make sure parent component has LoadScript with libraries={['visualization']}
 
 /**
  * Component to render a heatmap overlay for crime data
