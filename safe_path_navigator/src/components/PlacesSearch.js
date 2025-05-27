@@ -187,7 +187,7 @@ const PlacesSearch = ({
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [mapInstance]);
 
   // Save search history to localStorage whenever it changes
   useEffect(() => {
