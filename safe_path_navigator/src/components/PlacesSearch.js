@@ -141,18 +141,24 @@ const PlacesSearch = ({
       
       // Initialize Places Service if maps API is loaded
       if (window.google.maps.places) {
-        // We need a map instance to create a PlacesService
-        // This map won't be displayed, it's just for the Places API
-        const mapDiv = document.createElement('div');
-        const map = new window.google.maps.Map(mapDiv, {
-          center: { lat: 0, lng: 0 },
-          zoom: 1
-        });
-        mapRef.current = map;
-        
-        // Create the Places Service
-        const service = new window.google.maps.places.PlacesService(map);
-        setPlacesService(service);
+        // Use provided mapInstance if available, otherwise create a hidden map instance
+        if (mapInstance) {
+          mapRef.current = mapInstance;
+          const service = new window.google.maps.places.PlacesService(mapInstance);
+          setPlacesService(service);
+        } else {
+          // Create a hidden map for Places API
+          const mapDiv = document.createElement('div');
+          const map = new window.google.maps.Map(mapDiv, {
+            center: { lat: 0, lng: 0 },
+            zoom: 1
+          });
+          mapRef.current = map;
+          
+          // Create the Places Service
+          const service = new window.google.maps.places.PlacesService(map);
+          setPlacesService(service);
+        }
       }
     } else {
       // If not loaded, we set error and component will display appropriate message
@@ -343,9 +349,11 @@ const PlacesSearch = ({
     if (status === window.google.maps.places.PlacesServiceStatus.OK && results) {
       setSearchResults(results);
       
-      // Call the parent's onPlacesSearch callback if provided
+      // Call the parent's onPlacesSearch/onSearchComplete callback if provided
       if (onPlacesSearch && typeof onPlacesSearch === 'function') {
         onPlacesSearch(results);
+      } else if (onSearchComplete && typeof onSearchComplete === 'function') {
+        onSearchComplete(results);
       }
     } else {
       console.error('Places search failed:', status);
