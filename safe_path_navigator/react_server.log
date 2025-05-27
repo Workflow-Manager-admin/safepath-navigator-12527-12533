@@ -87,3 +87,6 @@ src/components/MainContainer/MainContainer.js
   Line 19:10:  'geocodeError' is assigned a value but never used            no-unused-vars
 
 webpack compiled with 1 warning
+Compiling...
+Compiled successfully!
+webpack compiled successfully

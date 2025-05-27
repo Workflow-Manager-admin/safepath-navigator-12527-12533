@@ -70,6 +70,7 @@ const SearchForm = () => {
     setOriginInput('');
     setDestinationInput('');
     clearRoutes();
+    setGeocodeError(null);
   };
 
   return (
@@ -83,8 +84,13 @@ const SearchForm = () => {
             placeholder="Enter starting point"
             value={originInput}
             onChange={(e) => setOriginInput(e.target.value)}
+            disabled={isGeocodingOrigin || isGeocodingDestination}
           />
-          {origin && (
+          {isGeocodingOrigin ? (
+            <span className="input-icon spinning">
+              <FaSpinner />
+            </span>
+          ) : origin && (
             <button 
               type="button" 
               className="clear-input"
@@ -108,8 +114,13 @@ const SearchForm = () => {
             placeholder="Enter destination"
             value={destinationInput}
             onChange={(e) => setDestinationInput(e.target.value)}
+            disabled={isGeocodingOrigin || isGeocodingDestination}
           />
-          {destination && (
+          {isGeocodingDestination ? (
+            <span className="input-icon spinning">
+              <FaSpinner />
+            </span>
+          ) : destination && (
             <button 
               type="button" 
               className="clear-input"
@@ -124,9 +135,20 @@ const SearchForm = () => {
         </div>
       </div>
       
+      {geocodeError && (
+        <div className="geocode-error">
+          <p>{geocodeError}</p>
+        </div>
+      )}
+      
       <div className="form-actions">
-        <button type="submit" className="btn-search" disabled={!originInput || !destinationInput}>
-          <FaSearch /> Find Routes
+        <button 
+          type="submit" 
+          className="btn-search" 
+          disabled={(!originInput && !destinationInput) || isGeocodingOrigin || isGeocodingDestination}
+        >
+          {(isGeocodingOrigin || isGeocodingDestination) ? <FaSpinner className="spinning" /> : <FaSearch />}
+          {(isGeocodingOrigin || isGeocodingDestination) ? ' Searching...' : ' Find Routes'}
         </button>
         
         {(origin || destination) && (
