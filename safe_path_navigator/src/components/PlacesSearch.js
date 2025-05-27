@@ -126,8 +126,8 @@ const PlacesSearch = ({
   const resultsRef = useRef(null);
   const mapRef = useRef(null);
   
-  // Use the memoized libraries array
-  const libraries = useGoogleMapsLibraries();
+  // Get the memoized libraries array (referenced in MapContext.js when loading the API)
+  const googleLibraries = useGoogleMapsLibraries();
 
   // Load search history from localStorage on component mount
   useEffect(() => {
@@ -694,7 +694,7 @@ const PlacesSearch = ({
                           <div key={index} className="photo-item">
                             <img 
                               src={photo.getUrl({maxWidth: 400, maxHeight: 300})} 
-                              alt={`${placeDetails.name} - photo ${index + 1}`} 
+                              alt={`${placeDetails.name} ${index + 1}`} 
                               loading="lazy"
                             />
                           </div>
