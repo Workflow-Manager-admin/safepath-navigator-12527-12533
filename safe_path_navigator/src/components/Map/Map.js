@@ -40,11 +40,14 @@ const Map = () => {
     showEmergencyServices
   } = useMapContext();
 
+  // Memoize the libraries array to prevent unnecessary re-renders
+  const libraries = useMemo(() => ['visualization', 'geocoding', 'places'], []);
+  
   // Load the Google Maps JavaScript API
   const { isLoaded, loadError } = useJsApiLoader({
     id: 'google-map-script',
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
-    libraries: ['visualization', 'geocoding', 'places']
+    libraries
   });
 
 
