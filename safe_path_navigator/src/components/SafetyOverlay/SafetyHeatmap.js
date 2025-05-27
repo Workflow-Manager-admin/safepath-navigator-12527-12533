@@ -6,6 +6,7 @@ import { mockCrimeData } from '../../utils/safetyUtils';
 /**
  * Component to render a heatmap overlay for crime data
  * @param {boolean} visible - Whether the heatmap should be visible
+ * @requires LoadScript or useJsApiLoader with libraries={['visualization']} in parent component
  * @PUBLIC_INTERFACE
  */
 const SafetyHeatmap = ({ visible = false }) => {
