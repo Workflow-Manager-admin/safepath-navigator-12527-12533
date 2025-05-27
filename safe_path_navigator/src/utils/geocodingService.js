@@ -14,6 +14,16 @@ export const geocodeAddress = async (address) => {
   if (!address || address.trim() === '') {
     return null;
   }
+
+  // Handle specific problematic address formats
+  let formattedAddress = address.trim();
+  
+  // If address doesn't have a city/state and might be incomplete, try to improve it
+  if (formattedAddress.match(/^\d+\s+[NSEW]?\s*[A-Za-z]+\s+[A-Za-z]+$/i)) {
+    // Address might be missing city/state - add more context
+    console.log(`Adding region context to potentially incomplete address: "${formattedAddress}"`);
+    formattedAddress = `${formattedAddress}, FL, USA`;
+  }
   
   try {
     // Ensure the Google Maps API is loaded
@@ -22,21 +32,63 @@ export const geocodeAddress = async (address) => {
       return null;
     }
     
+    console.log(`Geocoding address: "${formattedAddress}"`);
     const geocoder = new window.google.maps.Geocoder();
     
+    // Try with additional geocoding options for better results
     return new Promise((resolve, reject) => {
-      geocoder.geocode({ address }, (results, status) => {
-        if (status === window.google.maps.GeocoderStatus.OK && results && results.length > 0) {
-          const location = results[0].geometry.location;
-          resolve({
-            lat: location.lat(),
-            lng: location.lng()
-          });
-        } else {
-          console.warn(`Geocoding failed for address "${address}". Status: ${status}`);
-          resolve(null); // Resolve with null instead of rejecting to make error handling easier
+      geocoder.geocode(
+        { 
+          address: formattedAddress,
+          region: 'us', // Bias to US results
+          componentRestrictions: { country: 'us' } // Restrict to US
+        }, 
+        (results, status) => {
+          if (status === window.google.maps.GeocoderStatus.OK && results && results.length > 0) {
+            const location = results[0].geometry.location;
+            console.log(`Geocoding successful for "${formattedAddress}":`, {
+              lat: location.lat(),
+              lng: location.lng(),
+              formattedAddress: results[0].formatted_address
+            });
+            resolve({
+              lat: location.lat(),
+              lng: location.lng()
+            });
+          } else {
+            console.warn(`Geocoding failed for address "${formattedAddress}". Status: ${status}`);
+            
+            // Try a fallback method for specific address formats
+            if (status === window.google.maps.GeocoderStatus.ZERO_RESULTS && 
+                address.includes('Military Trail')) {
+              // Try a fallback for Military Trail addresses - modify the query
+              const fallbackAddress = address.replace(/\s+N\s+/, ' North ') + ', Florida, USA';
+              console.log(`Attempting fallback geocoding with: "${fallbackAddress}"`);
+              
+              geocoder.geocode({ address: fallbackAddress }, (fallbackResults, fallbackStatus) => {
+                if (fallbackStatus === window.google.maps.GeocoderStatus.OK && 
+                    fallbackResults && fallbackResults.length > 0) {
+                  const fallbackLocation = fallbackResults[0].geometry.location;
+                  console.log(`Fallback geocoding successful:`, {
+                    lat: fallbackLocation.lat(),
+                    lng: fallbackLocation.lng(),
+                    formattedAddress: fallbackResults[0].formatted_address
+                  });
+                  resolve({
+                    lat: fallbackLocation.lat(),
+                    lng: fallbackLocation.lng()
+                  });
+                } else {
+                  console.warn(`Fallback geocoding also failed. Status: ${fallbackStatus}`);
+                  resolve(null);
+                }
+              });
+            } else {
+              resolve(null);
+            }
+          }
         }
-      });
+      );
     });
   } catch (error) {
     console.error('Geocoding error:', error);
