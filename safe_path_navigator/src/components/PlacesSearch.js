@@ -727,7 +727,13 @@ const PlacesSearch = ({
                         <div className="info-icon"><FaGlobe /></div>
                         <div className="info-text">
                           <a href={placeDetails.website} target="_blank" rel="noopener noreferrer">
-                            {new URL(placeDetails.website).hostname.replace('www.', '')}
+                            {(() => {
+                              try {
+                                return new URL(placeDetails.website).hostname.replace('www.', '');
+                              } catch (e) {
+                                return placeDetails.website;
+                              }
+                            })()}
                             <FaExternalLinkAlt className="external-link-icon" />
                           </a>
                         </div>
@@ -841,7 +847,7 @@ const PlacesSearch = ({
         </div>
       )}
       
-      <style jsx="true">{`
+      <style jsx={true}>{`
         .places-search-container {
           position: relative;
         }
