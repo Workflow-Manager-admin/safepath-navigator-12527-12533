@@ -420,7 +420,7 @@ const PlacesSearch = ({
   
   // Helper function to format opening hours
   const formatOpeningHours = (openingHours) => {
-    if (!openingHours || !openingHours.weekday_text || openingHours.weekday_text.length === 0) {
+    if (!openingHours || !openingHours.weekday_text || !Array.isArray(openingHours.weekday_text) || openingHours.weekday_text.length === 0) {
       return null;
     }
     
