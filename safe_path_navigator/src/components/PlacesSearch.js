@@ -623,6 +623,194 @@ const PlacesSearch = ({
               <p>No places found nearby. Try a different location or search terms.</p>
             </div>
           )}
+          
+          {/* Place Details Panel */}
+          {selectedResult && (
+            <div className="place-details-panel">
+              {detailsLoading ? (
+                <div className="details-loading">
+                  <FaSpinner className="spinning" />
+                  <p>Loading place details...</p>
+                </div>
+              ) : detailsError ? (
+                <div className="details-error">
+                  <p>{detailsError}</p>
+                </div>
+              ) : placeDetails ? (
+                <div className="details-content">
+                  <div className="details-header">
+                    <h3>{placeDetails.name}</h3>
+                    {formatPlaceTypes(placeDetails.types) && (
+                      <div className="place-types">{formatPlaceTypes(placeDetails.types)}</div>
+                    )}
+                    {placeDetails.rating && (
+                      <div className="detail-rating">
+                        <span className="stars"><FaStar /></span>
+                        {placeDetails.rating.toFixed(1)}
+                        {placeDetails.user_ratings_total && (
+                          <span className="rating-count">({placeDetails.user_ratings_total} reviews)</span>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Place Photos */}
+                  {placeDetails.photos && placeDetails.photos.length > 0 && (
+                    <div className="place-photos">
+                      <div className="photos-scroll">
+                        {placeDetails.photos.slice(0, 5).map((photo, index) => (
+                          <div key={index} className="photo-item">
+                            <img 
+                              src={photo.getUrl({maxWidth: 400, maxHeight: 300})} 
+                              alt={`${placeDetails.name} - photo ${index + 1}`} 
+                              loading="lazy"
+                            />
+                          </div>
+                        ))}
+                        {placeDetails.photos.length > 5 && (
+                          <div className="photo-item more-photos">
+                            <div className="more-overlay">
+                              <FaCamera />
+                              <span>+{placeDetails.photos.length - 5} more</span>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Place Information */}
+                  <div className="place-info-grid">
+                    {placeDetails.formatted_address && (
+                      <div className="info-item">
+                        <div className="info-icon"><FaMapMarkerAlt /></div>
+                        <div className="info-text">{placeDetails.formatted_address}</div>
+                      </div>
+                    )}
+                    
+                    {placeDetails.formatted_phone_number && (
+                      <div className="info-item">
+                        <div className="info-icon"><FaPhone /></div>
+                        <div className="info-text">{placeDetails.formatted_phone_number}</div>
+                      </div>
+                    )}
+                    
+                    {placeDetails.website && (
+                      <div className="info-item">
+                        <div className="info-icon"><FaGlobe /></div>
+                        <div className="info-text">
+                          <a href={placeDetails.website} target="_blank" rel="noopener noreferrer">
+                            {new URL(placeDetails.website).hostname.replace('www.', '')}
+                            <FaExternalLinkAlt className="external-link-icon" />
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                    
+                    {placeDetails.url && (
+                      <div className="info-item">
+                        <div className="info-icon"><FaMapMarkerAlt /></div>
+                        <div className="info-text">
+                          <a href={placeDetails.url} target="_blank" rel="noopener noreferrer">
+                            View on Google Maps
+                            <FaExternalLinkAlt className="external-link-icon" />
+                          </a>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                  
+                  {/* Opening Hours */}
+                  {placeDetails.opening_hours && (
+                    <div className="opening-hours">
+                      <div className="section-title">
+                        <FaClock />
+                        <h4>Opening Hours</h4>
+                      </div>
+                      
+                      {placeDetails.opening_hours?.isOpen && (
+                        <div className="open-now">
+                          {placeDetails.opening_hours.isOpen() ? (
+                            <span className="open">Open Now</span>
+                          ) : (
+                            <span className="closed">Closed Now</span>
+                          )}
+                        </div>
+                      )}
+                      
+                      <div className="hours-list">
+                        {formatOpeningHours(placeDetails.opening_hours)?.map((dayText, index) => (
+                          <div 
+                            key={index} 
+                            className={`day-hours ${index === 0 ? 'current-day' : ''}`}
+                          >
+                            {dayText}
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                  
+                  {/* Reviews Section */}
+                  {placeDetails.reviews && placeDetails.reviews.length > 0 && (
+                    <div className="place-reviews">
+                      <div className="section-title">
+                        <FaComment />
+                        <h4>Reviews</h4>
+                      </div>
+                      
+                      <div className="reviews-list">
+                        {placeDetails.reviews.slice(0, 3).map((review, index) => (
+                          <div key={index} className="review-item">
+                            <div className="review-header">
+                              <div className="reviewer-info">
+                                {review.profile_photo_url && (
+                                  <img 
+                                    src={review.profile_photo_url} 
+                                    alt={review.author_name}
+                                    className="reviewer-photo"
+                                  />
+                                )}
+                                <div>
+                                  <div className="reviewer-name">{review.author_name}</div>
+                                  <div className="review-date">
+                                    {new Date(review.time * 1000).toLocaleDateString()}
+                                  </div>
+                                </div>
+                              </div>
+                              <div className="review-rating">
+                                <span className="stars"><FaStar /></span>
+                                {review.rating}
+                              </div>
+                            </div>
+                            <div className="review-text">{review.text}</div>
+                          </div>
+                        ))}
+                      </div>
+                      
+                      {placeDetails.reviews.length > 3 && (
+                        <div className="more-reviews">
+                          <a 
+                            href={placeDetails.url} 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="more-reviews-link"
+                          >
+                            View all {placeDetails.reviews.length} reviews on Google Maps
+                            <FaExternalLinkAlt className="external-link-icon" />
+                          </a>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <div className="details-not-available">
+                  <p>Select a place to view details.</p>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       )}
       
