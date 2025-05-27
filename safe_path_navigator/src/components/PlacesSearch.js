@@ -1083,6 +1083,301 @@ const PlacesSearch = ({
         .spinning {
           animation: spin 1s linear infinite;
         }
+        
+        /* Place Details Panel Styles */
+        .place-details-panel {
+          margin-top: 16px;
+          background: white;
+          border-top: 1px solid #ddd;
+          border-radius: 0 0 4px 4px;
+          overflow: hidden;
+        }
+        
+        .details-loading, .details-error, .details-not-available {
+          padding: 32px 16px;
+          text-align: center;
+          color: #666;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          gap: 12px;
+        }
+        
+        .details-loading .spinning {
+          font-size: 1.5rem;
+        }
+        
+        .details-content {
+          padding: 16px;
+        }
+        
+        .details-header {
+          margin-bottom: 16px;
+        }
+        
+        .details-header h3 {
+          margin: 0 0 4px;
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #333;
+        }
+        
+        .place-types {
+          margin: 0 0 4px;
+          font-size: 0.9rem;
+          color: #666;
+        }
+        
+        .detail-rating {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          font-size: 0.9rem;
+          color: #666;
+        }
+        
+        .detail-rating .stars {
+          color: #FBBC04;
+        }
+        
+        /* Place Photos */
+        .place-photos {
+          margin: 0 -16px 16px;
+          background: #f8f8f8;
+        }
+        
+        .photos-scroll {
+          display: flex;
+          overflow-x: auto;
+          padding: 8px 16px;
+          scroll-snap-type: x mandatory;
+          -webkit-overflow-scrolling: touch;
+          gap: 8px;
+        }
+        
+        .photo-item {
+          flex: 0 0 auto;
+          width: 200px;
+          height: 150px;
+          border-radius: 8px;
+          overflow: hidden;
+          position: relative;
+          scroll-snap-align: start;
+        }
+        
+        .photo-item img {
+          width: 100%;
+          height: 100%;
+          object-fit: cover;
+        }
+        
+        .more-photos {
+          position: relative;
+          background: #333;
+        }
+        
+        .more-overlay {
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          background: rgba(0, 0, 0, 0.7);
+          color: white;
+          font-size: 0.9rem;
+          gap: 8px;
+        }
+        
+        .more-overlay svg {
+          font-size: 1.5rem;
+        }
+        
+        /* Place Info Grid */
+        .place-info-grid {
+          margin-bottom: 16px;
+        }
+        
+        .info-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          margin-bottom: 12px;
+        }
+        
+        .info-icon {
+          color: #E87A41;
+          margin-top: 3px;
+          display: flex;
+        }
+        
+        .info-text {
+          flex: 1;
+          font-size: 0.95rem;
+          color: #333;
+        }
+        
+        .info-text a {
+          color: #4285F4;
+          text-decoration: none;
+          display: flex;
+          align-items: center;
+          gap: 6px;
+        }
+        
+        .external-link-icon {
+          font-size: 0.7rem;
+        }
+        
+        /* Opening Hours */
+        .opening-hours {
+          margin-bottom: 16px;
+          padding: 16px;
+          background: #f8f9fa;
+          border-radius: 8px;
+        }
+        
+        .section-title {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+          margin-bottom: 12px;
+        }
+        
+        .section-title h4 {
+          margin: 0;
+          font-size: 1rem;
+          font-weight: 500;
+          color: #333;
+        }
+        
+        .open-now {
+          margin-bottom: 8px;
+        }
+        
+        .open {
+          color: #34A853;
+          font-weight: 500;
+        }
+        
+        .closed {
+          color: #EA4335;
+          font-weight: 500;
+        }
+        
+        .hours-list {
+          font-size: 0.9rem;
+          color: #555;
+        }
+        
+        .day-hours {
+          padding: 4px 0;
+        }
+        
+        .day-hours.current-day {
+          font-weight: 500;
+          color: #333;
+        }
+        
+        /* Reviews Section */
+        .place-reviews {
+          margin-top: 16px;
+          padding-top: 16px;
+          border-top: 1px solid #eee;
+        }
+        
+        .reviews-list {
+          margin-bottom: 16px;
+        }
+        
+        .review-item {
+          padding: 12px 0;
+          border-bottom: 1px solid #eee;
+        }
+        
+        .review-item:last-child {
+          border-bottom: none;
+        }
+        
+        .review-header {
+          display: flex;
+          justify-content: space-between;
+          align-items: flex-start;
+          margin-bottom: 8px;
+        }
+        
+        .reviewer-info {
+          display: flex;
+          align-items: center;
+          gap: 8px;
+        }
+        
+        .reviewer-photo {
+          width: 36px;
+          height: 36px;
+          border-radius: 50%;
+          object-fit: cover;
+        }
+        
+        .reviewer-name {
+          font-size: 0.95rem;
+          font-weight: 500;
+          color: #333;
+        }
+        
+        .review-date {
+          font-size: 0.8rem;
+          color: #999;
+        }
+        
+        .review-rating {
+          display: flex;
+          align-items: center;
+          gap: 4px;
+          color: #666;
+        }
+        
+        .review-rating .stars {
+          color: #FBBC04;
+        }
+        
+        .review-text {
+          font-size: 0.9rem;
+          color: #444;
+          line-height: 1.5;
+          max-height: 100px;
+          overflow: hidden;
+          position: relative;
+        }
+        
+        .more-reviews {
+          text-align: center;
+          padding: 8px 0;
+        }
+        
+        .more-reviews-link {
+          display: inline-flex;
+          align-items: center;
+          gap: 6px;
+          color: #4285F4;
+          text-decoration: none;
+          font-size: 0.9rem;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+          .photo-item {
+            width: 150px;
+            height: 120px;
+          }
+          
+          .review-text {
+            max-height: 80px;
+          }
+        }
       `}</style>
     </div>
   );
