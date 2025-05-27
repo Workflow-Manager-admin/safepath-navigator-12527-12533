@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { GoogleMap, useJsApiLoader, Marker, Polyline, HeatmapLayer } from '@react-google-maps/api';
 import { useMapContext } from '../../context/MapContext';
 import { mockCrimeData, mockLightingData, mockEmergencyServices } from '../../utils/safetyUtils';
